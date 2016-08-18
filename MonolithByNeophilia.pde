@@ -1,4 +1,10 @@
-Circle c = new Circle();
+
+//global objects
+GameCircle c;
+LEDFactory ledFactory;
+
+//global variables
+int brightness = 255;
 
 void setup()
 {
@@ -7,7 +13,11 @@ void setup()
 background(0);
 size(300,675);
 
-InitializeLedArray(width / 29);
+ledFactory = new LEDFactory();
+ledFactory.InitializeLedArray(width / 29);
+
+InitializeGameObjects();
+
 
 }
 
@@ -15,7 +25,11 @@ InitializeLedArray(width / 29);
 void draw()
 {
   
-
 c.play();
 
+}
+
+void InitializeGameObjects()
+{
+  c = new GameCircle();
 }

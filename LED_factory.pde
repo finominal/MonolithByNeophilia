@@ -2,6 +2,7 @@
 int countLEDs = 2001;
 int xCount = 29;
 int yCount = 69;
+int factorValue;
 
 //holds all the LED info, xy, color, factored xy
 LED[] ledArray = new LED[countLEDs];
@@ -9,46 +10,60 @@ LED[] ledArray = new LED[countLEDs];
 //Defines an LED. Has Location (x, y) and red, green and blue colors
 class LED extends PVector 
 {
-  float  r, g, b; 
+  color pixelColor;
   PVector factored;
+  int factorValue;
   
   LED(int _x, int _y)//contstructor that tells us what to do when an LED class object is bought into existance. Expects x and y coordinates.
   {
     x = _x;
     y = _y;
     factored = new PVector();
+    
   }
 }
 
-void drawLedArray()
+class LEDFactory
 {
+ 
+  
+void drawLeds()
+  {
     for(int i=0; i<ledArray.length; i++)
     {
-      stroke(ledArray[i].r, ledArray[i].g, ledArray[i].b);
-      ellipse(ledArray[i].x, ledArray[i].y, 5, 5);
+      fill(ledArray[i].pixelColor);
+      ellipse(ledArray[i].factored.x + factorValue, ledArray[i].factored.y + factorValue, 5, 5);
     }
-}
-
-
-void InitializeLedArray( int factor)
-{
-  instantiateLedArray();
-  factorledArray( factor);
-}
-
-void factorledArray(int factor)
-{
-  for(int i=0; i<ledArray.length; i++)
-  {
-    ledArray[i].factored.x = ledArray[i].x * factor;
-    ledArray[i].factored.y = ledArray[i].y * factor;
   }
-}
+
+  void clearLedColors()
+  {
+    for(int i=0; i<ledArray.length; i++)
+    {
+     ledArray[i].pixelColor = 0;
+    }
+  }
+
+  void InitializeLedArray( int factor)
+  {
+    instantiateLedArray();
+    factorledArray( factor);
+  }
+
+  void factorledArray(int factor)
+  {
+    factorValue = factor;
+    for(int i=0; i<ledArray.length; i++)
+    {
+      ledArray[i].factored.x = ledArray[i].x * factor;
+      ledArray[i].factored.y = ledArray[i].y * factor;
+    }
+  }
 
 
-void instantiateLedArray()
-{
-  
+  void instantiateLedArray()
+  {
+    
 ledArray[0] = new LED(0,0);
 ledArray[1] = new LED(0,1);
 ledArray[2] = new LED(0,2);
@@ -2050,4 +2065,6 @@ ledArray[1997] = new LED(28,65);
 ledArray[1998] = new LED(28,66);
 ledArray[1999] = new LED(28,67);
 ledArray[2000] = new LED(28,68);
+}
+
 }
