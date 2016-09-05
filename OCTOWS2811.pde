@@ -1,8 +1,9 @@
-import processing.serial.*;
-import java.awt.Rectangle;
+
 
 // teensy 3.1 "/dev/tty.usbmodem1017291"
-
+int octoX = 0; 
+int octoY = 0;
+int ledsPerStrip = 0;
 
 int numPorts=0;  // the number of serial ports in use
 int maxPorts=24; // maximum number of serial ports
@@ -23,39 +24,77 @@ void setupLedToSerial()
   println("Serial Ports List:");
   println(list);
   serialConfigure("/dev/tty.usbmodem1017291");  // change these to your port names
+  
+    for (int i=0; i < 256; i++) {
+    gammatable[i] = (int)(pow((float)i / 255.0, gamma) * 255.0 + 0.5);
+  }
 }
 
 
-// scale a number by the inverse of a percentage, from 0 to 100
-int percentageInverse(int num, int percent) {
-  double div = percentageFloat(percent);
-  double output = num / div;
-  return (int)output;
-}
+void pushLedArrayToOctows2811()
+{
+  if (errorCount == 0)
+  {
+  
+  byte[] octoData =  new byte[(octoX * octoX * 3) + 3];
+  //get the first pixel from each string. 
+  int  mask;
+  int offset = 0;
+  
+  //set the headers of the frame
+  octoData[0] = '*';  
+  offset++;
+  
+  octoData[1] = 0;
+  offset++;
+  
+  octoData[2] = 0;
+  offset++;
+  
+  
+  //set one set of 8 pixels at a time, with the first bytes in parallel
+  color pixel[] = new color[8];
 
+    for (int x = 0; x < ledsPerStrip; x++) {
+      for (int i=0; i < 8; i++) {
+        // fetch 8 pixels from the image, 1 for each pin
+        
+        if(x >= 69 && i==7 ) //speed this up by partitioning the for loop
+        {
+          //last section is unpopulated, so just push blank
+           pixel[i] = 0;
+           
+        }
+        else
+        {
+          if (x*8+i > 2000)
+          {
+          pixel[i] = 0;
+          }
+          else
+          {
+             pixel[i] = ledFactory.ledArray[(x*8)+i].pixelColor;
+             //pixel[i] = colorWiring(pixel[i]);
+          }
+        }
+        
+      }
+      // convert 8 pixels to 24 bytes
+      for (mask = 0x800000; mask != 0; mask >>= 1) {
+        byte b = 0;
+        for (int i=0; i < 8; i++) {
+          if ((pixel[i] & mask) != 0) b |= (1 << i);
+        }
+        octoData[offset++] = b;
+      }
+    }
+    ledSerial[0].write(octoData);
+  }//error count
+} 
 
-// scale a number by a percentage, from 0 to 100
-int percentage(int num, int percent) {
-  double mult = percentageFloat(percent);
-  double output = num * mult;
-  return (int)output;
-}
+ 
 
-
-// convert an integer from 0 to 100 to a float percentage
-// from 0.0 to 1.0.  Special cases for 1/3, 1/6, 1/7, etc
-// are handled automatically to fix integer rounding.
-double percentageFloat(int percent) {
-  if (percent == 33) return 1.0 / 3.0;
-  if (percent == 17) return 1.0 / 6.0;
-  if (percent == 14) return 1.0 / 7.0;
-  if (percent == 13) return 1.0 / 8.0;
-  if (percent == 11) return 1.0 / 9.0;
-  if (percent ==  9) return 1.0 / 11.0;
-  if (percent ==  8) return 1.0 / 12.0;
-  return (double)percent / 100.0;
-
-}
+//can bypass alot of if we just go with OCTOWS2811 raw
 // ask a Teensy board for its LED configuration, and set up the info for it.
 void serialConfigure(String portName) {
   if (numPorts >= maxPorts) {
@@ -86,10 +125,18 @@ void serialConfigure(String portName) {
     errorCount++;
     return;
   }
+  
+  octoX = Integer.parseInt(param[0]); 
+  octoY =Integer.parseInt(param[1]);
+  ledsPerStrip = octoX * octoY /8;
+  
   // only store the info and increase numPorts if Teensy responds properly
   ledImage[numPorts] = new PImage(Integer.parseInt(param[0]), Integer.parseInt(param[1]), RGB);
   ledArea[numPorts] = new Rectangle(Integer.parseInt(param[5]), Integer.parseInt(param[6]),
                      Integer.parseInt(param[7]), Integer.parseInt(param[8]));
   ledLayout[numPorts] = (Integer.parseInt(param[5]) == 0);
   numPorts++;
+  println("Setup usb: " + portName);
+  println("Leds per strip: " + ledsPerStrip);
+  
 }

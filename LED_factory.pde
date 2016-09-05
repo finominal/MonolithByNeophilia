@@ -4,8 +4,6 @@ int xCount = 29;
 int yCount = 69;
 int factorValue;
 
-//holds all the LED info, xy, color, factored xy
-LED[] ledArray = new LED[countLEDs];
 
 //Defines an LED. Has Location (x, y) and red, green and blue colors
 class LED extends PVector 
@@ -25,9 +23,10 @@ class LED extends PVector
 
 class LEDFactory
 {
- 
+ //holds all the LED info, xy, color, factored xy
+  LED[] ledArray = new LED[countLEDs];
   
-void drawLeds()
+  void drawLeds()
   {
     for(int i=0; i<ledArray.length; i++)
     {
