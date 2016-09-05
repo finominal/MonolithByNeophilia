@@ -13,7 +13,7 @@ int brightness = 255;
 
 void setup()
 {
-  frameRate(20);
+  frameRate(30);
  // serialConfigure("/dev/tty.usbmodem1017291");  //Teensy 3.1
   
   

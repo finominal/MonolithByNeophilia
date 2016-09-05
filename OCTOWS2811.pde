@@ -54,29 +54,23 @@ void pushLedArrayToOctows2811()
   
   //set one set of 8 pixels at a time, with the first bytes in parallel
   color pixel[] = new color[8];
+  int sourceIdx = 0;
 
     for (int x = 0; x < ledsPerStrip; x++) {
+      
       for (int i=0; i < 8; i++) {
         // fetch 8 pixels from the image, 1 for each pin
         
-        if(x >= 69 && i==7 ) //speed this up by partitioning the for loop
-        {
-          //last section is unpopulated, so just push blank
-           pixel[i] = 0;
-           
-        }
-        else
-        {
-          if (x*8+i > 2000)
+          sourceIdx = (ledsPerStrip * i) + x;
+          if (sourceIdx > 2000) //if we are outside the main array, blank fill
           {
-          pixel[i] = 0;
+            pixel[i] = 0;
           }
           else
           {
-             pixel[i] = ledFactory.ledArray[(x*8)+i].pixelColor;
-             //pixel[i] = colorWiring(pixel[i]);
+             pixel[i] = ledFactory.ledArray[sourceIdx].pixelColor;
+             pixel[i] = colorWiring(pixel[i]);
           }
-        }
         
       }
       // convert 8 pixels to 24 bytes
