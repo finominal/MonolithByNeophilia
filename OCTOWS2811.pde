@@ -68,7 +68,7 @@ void pushLedArrayToOctows2811()
           }
           else
           {
-             pixel[i] = ledFactory.ledArray[sourceIdx].pixelColor;
+             pixel[i] = ledArray[sourceIdx].pixelColor;
              pixel[i] = colorWiring(pixel[i]);
           }
         
