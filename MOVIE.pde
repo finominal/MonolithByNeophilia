@@ -19,14 +19,21 @@ Movie myMovie; // = new Movie(this, "/Users/finbot/Desktop/Sequence 01.mov");
 boolean playing =  false;
 
 void playMovie(String movieFile) {
+  
 if(!playing)
 {
   myMovie = new Movie(this, movieFile);
   myMovie.loop();  // start the movie :-)
   playing= true;
+  
+  //for debugging, force values
+  if(errorCount > 0)
+  {
+    ledImage[0] = new PImage(yCount,xCount, RGB);
+    ledArea[0] = new Rectangle(0, 0,yCount,xCount );
+  }
 }
 
- 
   if(myMovie.available())
   {
     movieToLedFactory(myMovie);
@@ -40,18 +47,11 @@ if(!playing)
 }
 
 
+
  void movieToLedFactory(Movie m)
  {
     m.read();
-   
-    ledImage[0] = new PImage(yCount,xCount, RGB);
-    ledArea[0] = new Rectangle(0, 0,yCount,xCount );
-  
-    //int xoffset = percentage(m.width, ledArea[0].x);
-    //int yoffset = percentage(m.height, ledArea[0].y);
-    //int xwidth =  percentage(m.width, ledArea[0].width);
-    //int yheight = percentage(m.height, ledArea[0].height);
-    
+
      //scale the image
     ledImage[0].copy(m, 0, 0, m.width, m.height,0, 0, ledImage[0].width, ledImage[0].height);
                      
