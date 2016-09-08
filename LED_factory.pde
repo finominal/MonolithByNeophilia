@@ -22,6 +22,9 @@ class LED extends PVector
 }
 
 
+class LedFactory
+{
+
  //holds all the LED info, xy, color, factored xy
   LED[] ledArray = new LED[countLEDs];
   
@@ -2066,4 +2069,6 @@ ledArray[1997] = new LED(28,65);
 ledArray[1998] = new LED(28,66);
 ledArray[1999] = new LED(28,67);
 ledArray[2000] = new LED(28,68);
+}
+
 }

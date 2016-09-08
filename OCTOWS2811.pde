@@ -1,5 +1,8 @@
 
 
+class Octows2811
+{
+
 // teensy 3.1 "/dev/tty.usbmodem1017291"
 int octoX = 0; 
 int octoY = 0;
@@ -17,7 +20,7 @@ int[] gammatable = new int[256];
 int errorCount=0;
 float framerate=0;
 
-void setupLedToSerial()
+void SetupLedToSerial()
 {
   String[] list = Serial.list();
   delay(20);
@@ -68,7 +71,7 @@ void pushLedArrayToOctows2811()
           }
           else
           {
-             pixel[i] = ledArray[sourceIdx].pixelColor;
+             pixel[i] = ledFactory.ledArray[sourceIdx].pixelColor;
              pixel[i] = colorWiring(pixel[i]);
           }
         
@@ -97,7 +100,7 @@ void serialConfigure(String portName) {
     return;
   }
   try {
-    ledSerial[numPorts] = new Serial(this, portName);
+    ledSerial[numPorts] = newSerial( portName);
     if (ledSerial[numPorts] == null) throw new NullPointerException();
     ledSerial[numPorts].write('?');
   } catch (Throwable e) {
@@ -133,4 +136,11 @@ void serialConfigure(String portName) {
   println("Setup usb: " + portName);
   println("Leds per strip: " + ledsPerStrip);
   
+}
+
+}
+
+Serial newSerial(String portName)
+{
+  return new Serial(this, portName);
 }
