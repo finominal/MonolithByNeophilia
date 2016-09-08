@@ -16,31 +16,41 @@
 
 
 Movie myMovie; // = new Movie(this, "/Users/finbot/Desktop/Sequence 01.mov");
-
+boolean playing =  false;
 
 void playMovie(String movieFile) {
-
+if(!playing)
+{
   myMovie = new Movie(this, movieFile);
   myMovie.loop();  // start the movie :-)
+  playing= true;
 }
 
-// movieEvent runs for each new frame of movie data
-void movieEvent(Movie m) {
-  //movieToOcto(m);
-  movieToLedFactory(m);
-}
  
+  if(myMovie.available())
+  {
+    movieToLedFactory(myMovie);
+    //movieToOcto(m);
+  }
+  else 
+  {
+    playing = false;
+  }
+  
+}
+
+
  void movieToLedFactory(Movie m)
  {
     m.read();
    
-    ledImage[0] = new PImage(xCount,yCount, RGB);
-    ledArea[0] = new Rectangle(0, 0,xCount,yCount );
+    ledImage[0] = new PImage(yCount,xCount, RGB);
+    ledArea[0] = new Rectangle(0, 0,yCount,xCount );
   
-    int xoffset = percentage(m.width, ledArea[0].x);
-    int yoffset = percentage(m.height, ledArea[0].y);
-    int xwidth =  percentage(m.width, ledArea[0].width);
-    int yheight = percentage(m.height, ledArea[0].height);
+    //int xoffset = percentage(m.width, ledArea[0].x);
+    //int yoffset = percentage(m.height, ledArea[0].y);
+    //int xwidth =  percentage(m.width, ledArea[0].width);
+    //int yheight = percentage(m.height, ledArea[0].height);
     
      //scale the image
     ledImage[0].copy(m, 0, 0, m.width, m.height,0, 0, ledImage[0].width, ledImage[0].height);
@@ -48,15 +58,18 @@ void movieEvent(Movie m) {
     //push to leds
     for(int j = 0; j<ledArray.length;j++)
     {
-      ledArray[j].pixelColor = 0xff0000;//colorWiring(ledImage[0].pixels[j]);
+      if(j%158>78)
+      {
+        ledArray[j].pixelColor = 0x00ff00;
+      }
+      else
+      {
+        ledArray[j].pixelColor = ledImage[0].pixels[j];//colorWiring(ledImage[0].pixels[j]);
+      }
     }
-    
-    //display on screen
+
     drawLeds();
-    
-    //push to Octo
     pushLedArrayToOctows2811();
- 
  }
 
 void movieToOcto(Movie m) {

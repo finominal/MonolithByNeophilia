@@ -35,7 +35,9 @@ void draw()
   
 //c.play();
 playMovie("/Users/finbot/Desktop/Sequence 01.mov");
-
+   // drawLeds();
+    //image(ledImage[0], 0,0);
+   
 }
 
 void InitializeAllTheThings()
