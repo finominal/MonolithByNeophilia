@@ -34,7 +34,7 @@ void draw()
 {
   
 //c.play();
-playMovie("/Users/finbot/Desktop/Sequence 01.mov");
+playMovie(movies[0]);
    // drawLeds();
     //image(ledImage[0], 0,0);
    

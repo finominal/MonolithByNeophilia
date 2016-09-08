@@ -15,8 +15,17 @@
 //     edit framerate in movieEvent().
 
 
+String[] movies = 
+{
+"/Users/finbot/Documents/Projects/Monolith/Video/FireLooped.mov",
+"/Users/finbot/Documents/Projects/Monolith/Video/ThanksCityBuilders.mov",
+"/Users/finbot/Documents/Projects/Monolith/Video/ThanksCityBuilders2.mov"
+};
+
 Movie myMovie; // = new Movie(this, "/Users/finbot/Desktop/Sequence 01.mov");
+
 boolean playing =  false;
+boolean newFrame = false;
 
 void playMovie(String movieFile) {
   
@@ -34,18 +43,20 @@ if(!playing)
   }
 }
 
-  if(myMovie.available())
+  if(newFrame)
   {
     movieToLedFactory(myMovie);
     //movieToOcto(m);
+     newFrame = false;
   }
-  else 
-  {
-    playing = false;
-  }
+
   
 }
 
+void movieEvent(Movie m)
+{
+  newFrame = true;
+}
 
 
  void movieToLedFactory(Movie m)
@@ -58,7 +69,8 @@ if(!playing)
     //push to leds
     for(int j = 0; j<ledArray.length;j++)
     {
-       ledArray[j].pixelColor = ledImage[0].pixels[(int)((ledArray[j].x*yCount)+ledArray[j].y)];
+      int idx = (int)(((xCount -1 -ledArray[j].x) * yCount)+(ledArray[j].y));
+       ledArray[j].pixelColor = ledImage[0].pixels[idx];
     }
 
     drawLeds();
