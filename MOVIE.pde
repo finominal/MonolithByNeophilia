@@ -58,14 +58,7 @@ if(!playing)
     //push to leds
     for(int j = 0; j<ledArray.length;j++)
     {
-      if(j%158>78)
-      {
-        ledArray[j].pixelColor = 0x00ff00;
-      }
-      else
-      {
-        ledArray[j].pixelColor = ledImage[0].pixels[j];//colorWiring(ledImage[0].pixels[j]);
-      }
+       ledArray[j].pixelColor = ledImage[0].pixels[(int)((ledArray[j].x*yCount)+ledArray[j].y)];
     }
 
     drawLeds();
