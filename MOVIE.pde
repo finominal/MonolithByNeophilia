@@ -1,26 +1,4 @@
-/*  OctoWS2811 movie2serial.pde - Transmit video data to 1 or more
-      Teensy 3.0 boards running OctoWS2811 VideoDisplay.ino
-    http://www.pjrc.com/teensy/td_libs_OctoWS2811.html
-    Copyright (c) 2013 Paul Stoffregen, PJRC.COM, LLC
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in
-    all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-    THE SOFTWARE.
-*/
 
 // To configure this program, edit the following sections:
 //
@@ -37,17 +15,58 @@
 //     edit framerate in movieEvent().
 
 
-Movie myMovie = new Movie(this, "/Users/finbot/Desktop/Sequence 01.mov");
+Movie myMovie; // = new Movie(this, "/Users/finbot/Desktop/Sequence 01.mov");
+boolean playing =  false;
 
-
-void setupMovie() {
-
+void playMovie(String movieFile) {
+  
+if(!playing)
+{
+  myMovie = new Movie(this, movieFile);
   myMovie.loop();  // start the movie :-)
+  playing= true;
+  
+  //for debugging, force values
+  if(errorCount > 0)
+  {
+    ledImage[0] = new PImage(yCount,xCount, RGB);
+    ledArea[0] = new Rectangle(0, 0,yCount,xCount );
+  }
 }
 
- 
-// movieEvent runs for each new frame of movie data
-void movieEvent(Movie m) {
+  if(myMovie.available())
+  {
+    movieToLedFactory(myMovie);
+    //movieToOcto(m);
+  }
+  else 
+  {
+    playing = false;
+  }
+  
+}
+
+
+
+ void movieToLedFactory(Movie m)
+ {
+    m.read();
+
+     //scale the image
+    ledImage[0].copy(m, 0, 0, m.width, m.height,0, 0, ledImage[0].width, ledImage[0].height);
+                     
+    //push to leds
+    for(int j = 0; j<ledArray.length;j++)
+    {
+       ledArray[j].pixelColor = ledImage[0].pixels[(int)((ledArray[j].x*yCount)+ledArray[j].y)];
+    }
+
+    drawLeds();
+    pushLedArrayToOctows2811();
+ }
+
+void movieToOcto(Movie m) {
+  //this requires that the octo was found on startup, cant debug.
   // read the movie's next frame
   m.read();
   

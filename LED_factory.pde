@@ -21,18 +21,19 @@ class LED extends PVector
   }
 }
 
-class LEDFactory
-{
+
  //holds all the LED info, xy, color, factored xy
   LED[] ledArray = new LED[countLEDs];
   
   void drawLeds()
   {
+   background(0);
     for(int i=0; i<ledArray.length; i++)
     {
       fill(ledArray[i].pixelColor);
       ellipse(ledArray[i].factored.x + factorValue, ledArray[i].factored.y + factorValue, 5, 5);
     }
+    redraw();
   }
 
   void clearLedColors()
@@ -41,6 +42,7 @@ class LEDFactory
     {
      ledArray[i].pixelColor = 0;
     }
+   
   }
 
   void InitializeLedArray( int factor)
@@ -2064,6 +2066,4 @@ ledArray[1997] = new LED(28,65);
 ledArray[1998] = new LED(28,66);
 ledArray[1999] = new LED(28,67);
 ledArray[2000] = new LED(28,68);
-}
-
 }

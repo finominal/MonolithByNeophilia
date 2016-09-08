@@ -10,20 +10,20 @@ class GameCircle extends PVector
 
 void play()
 {
-
   x = mouseX;
   y = mouseY;
         
-  ledFactory.clearLedColors();
+ // ledFactory. 
+  clearLedColors();
 
-  for(int i=0; i<ledFactory.ledArray.length; i++)
+  for(int i=0; i<ledArray.length; i++)
   {
-    float distance = this.dist(ledFactory.ledArray[i].factored);
+    float distance = this.dist(ledArray[i].factored);
     
-    if(distance<50) ledFactory.ledArray[i].pixelColor = color(brightness-(distance* (brightness/circleDistance)), 0, 0);;
+    if(distance<50) ledArray[i].pixelColor = color(brightness-(distance* (brightness/circleDistance)), 0, 0);;
   }
       
-  ledFactory.drawLeds();
+  drawLeds();
   pushLedArrayToOctows2811();
   
   }

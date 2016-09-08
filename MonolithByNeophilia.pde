@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 
 //global objects
 GameCircle c;
-LEDFactory ledFactory;
+//LEDFactory ledFactory;
 
 //global variables
 int brightness = 255;
@@ -20,7 +20,7 @@ void setup()
 background(0);
 size(300,675);
 
-ledFactory = new LEDFactory();
+//ledFactory = new LEDFactory();
 
 InitializeAllTheThings();
 
@@ -33,13 +33,16 @@ setupLedToSerial();
 void draw()
 {
   
-c.play();
-
+//c.play();
+playMovie("/Users/finbot/Desktop/Sequence 01.mov");
+   // drawLeds();
+    //image(ledImage[0], 0,0);
+   
 }
 
 void InitializeAllTheThings()
 {
-  ledFactory.InitializeLedArray(width / 29);
+  InitializeLedArray(width / 29);
   InitializeGPIO();
   InitializeGameObjects();
 }
