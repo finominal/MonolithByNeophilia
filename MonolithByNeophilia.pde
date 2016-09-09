@@ -3,6 +3,9 @@ import processing.serial.*;
 import processing.video.*;
 import java.awt.Rectangle;
 
+int worldWidth = 300;
+int worldHeight = 675;
+
 LedFactory ledFactory;
 Octows2811 octows2811;
 SensorFactory sensorFactory;
@@ -15,11 +18,10 @@ int brightness = 255;
 boolean showSim = true;
 
 
+
 void setup()
 {
   frameRate(60);
- // serialConfigure("/dev/tty.usbmodem1017291");  //Teensy 3.1
-  
   
 background(0);
 size(300,675);
@@ -29,8 +31,6 @@ octows2811 = new Octows2811();
 sensorFactory = new SensorFactory();
 
 InitializeAllTheThings();
-
-octows2811.SetupLedToSerial();
 
 }
 
@@ -46,8 +46,8 @@ println(this.frameRate);
 
 void InitializeAllTheThings()
 {
-  ledFactory.InitializeLedArray(width / 29);
-  sensorFactory.InitializeGPIO();
+  ledFactory.InitializeLedArray();
+  sensorFactory.initializeSensorArray(worldWidth, worldHeight);
   InitializeGames();
 }
 

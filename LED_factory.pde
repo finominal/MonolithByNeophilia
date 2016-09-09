@@ -51,10 +51,10 @@ class LedFactory
    
   }
 
-  void InitializeLedArray( int factor)
+  void InitializeLedArray( )
   {
     instantiateLedArray();
-    factorledArray( factor);
+    factorledArray( width / 29);
   }
 
   void factorledArray(int factor)

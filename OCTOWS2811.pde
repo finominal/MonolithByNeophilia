@@ -4,8 +4,6 @@ class Octows2811
 {
   //NOTE Arrays are not needed for the monolith, only one teensy being used. 
 
- String teensySerialName = "/dev/tty.usbmodem1017291";
-
 int octoX = 0; 
 int octoY = 0;
 int ledsPerStrip = 0;
@@ -22,13 +20,16 @@ int[] gammatable = new int[256];
 int errorCount=0;
 float framerate=0;
 
+Octows2811()
+{
+  SetupLedToSerial();
+}
+
 void SetupLedToSerial()
 {
-  String[] list = Serial.list();
-  delay(20);
-  println("Serial Ports List:");
-  println(list);
-  serialConfigure(teensySerialName);  // change these to your port names
+  displayAvailableSerialPorts();
+
+  serialConfigure(teensySerialPort);  // change these to your port names
   
     for (int i=0; i < 256; i++) {
     gammatable[i] = (int)(pow((float)i / 255.0, gamma) * 255.0 + 0.5);
@@ -140,9 +141,4 @@ void serialConfigure(String portName) {
   
 }
 
-}
-
-Serial newSerial(String portName)
-{
-  return new Serial(this, portName);
 }

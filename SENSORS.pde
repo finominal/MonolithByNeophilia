@@ -16,7 +16,7 @@ class Sensor extends PVector
 
 class SensorFactory
 {
-
+  
 int sensorsXCount = 10;
 int sensorsYCount = 23;
 int sensorsPerMux = 15;
@@ -28,6 +28,14 @@ int sensorReadOrderIndex[] = {
                               };
 
 Sensor sensorArrayXY[][] = new Sensor[sensorsXCount][sensorsYCount];
+
+
+SensorFactory()
+{
+  
+  initializeGPIO();
+ // initializeGpioSerial(); //turned off until needed on Pi
+}
 
 /*
 Reading Sensors happens by settint the INPUT of all muxes together using
@@ -55,7 +63,7 @@ void readAllSensors()
   
 }
 
-void InitializeGPIO()
+void initializeGPIO()
 {
   //section1 - LEFT UPPER 
   GPIO.pinMode(4,  GPIO.INPUT);
@@ -87,16 +95,16 @@ void InitializeGPIO()
 }
 
 
-void initializeSensorArray()
+void initializeSensorArray(int w, int h)
 {
-  int sensorsXCount = 10;
+  int sensorsXCount = 10; //<>//
   int sensorsYCount = 23;
   
   for(int x = 0; x<sensorsXCount;x++)
   {
     for(int y = 0; x<sensorsYCount;y++)
     {
-      this.sensorArrayXY[x][y] = new Sensor(x,y, width/sensorsXCount, height/sensorsYCount ); //doubling up on the x/y, but will be useful for calculating distances
+      this.sensorArrayXY[x][y] = new Sensor(x,y, w/sensorsXCount, h/sensorsYCount ); //doubling up on the x/y, but will be useful for calculating distances
     }
   }
 }
