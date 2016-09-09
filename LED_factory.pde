@@ -30,13 +30,16 @@ class LedFactory
   
   void drawLeds()
   {
+    if(showSim)
+    {
    background(0);
     for(int i=0; i<ledArray.length; i++)
     {
       fill(ledArray[i].pixelColor);
       ellipse(ledArray[i].factored.x + factorValue, ledArray[i].factored.y + factorValue, 5, 5);
     }
-    redraw();
+    //redraw();
+    }
   }
 
   void clearLedColors()
