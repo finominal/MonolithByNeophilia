@@ -21,7 +21,7 @@ boolean showSim = true;
 
 void setup()
 {
-  frameRate(60);
+  frameRate(30); //???
   
 background(0);
 size(300,675);
@@ -38,16 +38,16 @@ InitializeAllTheThings();
 void draw()
 {
   
-//c.play();
-playMovie(movies[3]);
+c.play();
+//playMovie(movies[0]);
 
-println(this.frameRate);
+//println(this.frameRate);
 }
 
 void InitializeAllTheThings()
 {
   ledFactory.InitializeLedArray();
-  sensorFactory.initializeSensorArray(worldWidth, worldHeight);
+  sensorFactory.initializeSensorArray();
   InitializeGames();
 }
 

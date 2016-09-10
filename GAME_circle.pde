@@ -18,7 +18,7 @@ void play()
 
   for(int i=0; i<ledFactory.ledArray.length; i++)
   {
-    float distance = this.dist(ledFactory.ledArray[i].factored);
+    float distance = this.dist(ledFactory.ledArray[i].worldLocation);
     
     if(distance<50) ledFactory.ledArray[i].pixelColor = color(brightness-(distance* (brightness/circleDistance)), 0, 0);;
   }
