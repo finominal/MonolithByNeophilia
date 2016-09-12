@@ -1,7 +1,5 @@
 
 
-
-
 class SensorFactory
 {
   
@@ -27,6 +25,7 @@ class SensorFactory
     initializeGPIO();
     //initializeGpioSerial(); //turned off until needed on Pi
   }
+
 
 /*
 Reading Sensors happens by settint the INPUT of all muxes together using
@@ -78,6 +77,41 @@ It reads all the channel threes of the muxes in one speep, and then selected a d
     
   }
 
+
+
+  void drawSensorsOnSim()
+  {
+    if(showSim)
+    {
+
+    for(int x=0; x<sensorsXCount; x++)
+    {
+          for(int y=0; y<sensorsYCount; y++)
+    {
+      Sensor currentSensor = sensorArrayXY[x][y];
+      
+      if(currentSensor.on)
+      {
+        fill(color(0,250,0));
+      }
+      else
+      {
+        fill(color(0,120,0));
+      }
+      ellipse(currentSensor.worldLocation.x, currentSensor.worldLocation.y, 2,2);
+    }
+  
+    }
+  }
+}
+
+
+
+
+
+
+
+
   void initializeGPIO()
   {
     //section1 - LEFT UPPER 
@@ -123,7 +157,6 @@ It reads all the channel threes of the muxes in one speep, and then selected a d
       }
     }
   }
-
 }
 
 
@@ -139,8 +172,8 @@ class Sensor extends PVector
     y = _y;
     
     worldLocation = new PVector();
-    worldLocation.x = x * _factorX;
-    worldLocation.y = y * _factorY;
+    worldLocation.x = (x * (_factorX-1)) + 13;
+    worldLocation.y = (y * (_factorY)) + 13;
     
     factorValue = _factorX;
     

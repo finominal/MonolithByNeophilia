@@ -24,11 +24,15 @@ class LED extends PVector
 
 class LedFactory
 {
-
- //holds all the LED info, xy, color, factored xy
-  LED[] ledArray = new LED[countLEDs];
+  //You can use either one of these
+  //holds all the LED info, xy, color, factored xy
+  LED[] ledArray = new LED[xCount*yCount];
   
-  void drawLeds()
+  //a copy of the above, but in an XY array
+  LED[][] ledArrayXY = new LED[xCount][yCount];
+  
+
+  void drawLedsOnSim()
   {
     if(showSim)
     {
@@ -37,25 +41,56 @@ class LedFactory
     for(int i=0; i<ledArray.length; i++)
     {
       fill(ledArray[i].pixelColor);
-      ellipse(ledArray[i].worldLocation.x + factorValue, ledArray[i].worldLocation.y + factorValue, 5, 5);
+      ellipse(ledArray[i].worldLocation.x, ledArray[i].worldLocation.y, 5, 5);
     }
     //redraw();
     }
   }
+  
+  void drawXYLedsOnSim()
+  {
+    if(showSim)
+    {
+      
+    background(0);
+    
+    //Show
+    for(int x=0; x<xCount; x++)
+    {
+      for(int y=0; y<yCount; y++)
+      {
+        fill(ledArrayXY[x][y].pixelColor);
+        ellipse(ledArrayXY[x][y].worldLocation.x, ledArrayXY[x][y].worldLocation.y, 5, 5);
+      }
+    }
+    //redraw();
+    }
+  }
+  
 
   void clearLedColors()
   {
+    //clearStraightArray
     for(int i=0; i<ledArray.length; i++)
     {
      ledArray[i].pixelColor = 0;
     }
    
+    //clearXYArray
+    for(int x=0; x<xCount; x++)
+    {
+      for(int y=0; y<yCount; y++)
+      {
+       ledArrayXY[x][y].pixelColor = 0;
+      }
+    }
   }
 
   void InitializeLedArray( )
   {
     instantiateLedArray();
-    factorledArray( width / 29);
+    factorledArray( width / 29); //better to factor w and h independantly?
+    copyToXYArray();
   }
 
   void factorledArray(int factor)
@@ -63,14 +98,26 @@ class LedFactory
     factorValue = factor;
     for(int i=0; i<ledArray.length; i++)
     {
-      ledArray[i].worldLocation.x = ledArray[i].x * factor;
-      ledArray[i].worldLocation.y = ledArray[i].y * factor;
+      ledArray[i].worldLocation.x = (ledArray[i].x * factor) + factor;
+      ledArray[i].worldLocation.y = (ledArray[i].y * factor) + factor;
     }
+  }
+  
+  private void copyToXYArray()
+  {
+    for(int i = 0; i>ledArray.length; i++)
+    {
+      ledArrayXY[(int)ledArray[i].x][(int)ledArray[i].y] = ledArray[i];
+    }
+    
   }
 
 
-  void instantiateLedArray()
-  {
+
+
+
+void instantiateLedArray()
+{
     
 ledArray[0] = new LED(0,0);
 ledArray[1] = new LED(0,1);

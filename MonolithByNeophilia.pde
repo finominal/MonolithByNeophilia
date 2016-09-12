@@ -11,6 +11,9 @@ Octows2811 octows2811;
 SensorFactory sensorFactory;
 
 //global objects
+GameState gameState = GameState.WAITING;
+
+//Games
 GameCircle c;
 
 //global variables
@@ -21,10 +24,10 @@ boolean showSim = true;
 
 void setup()
 {
-  frameRate(30); //???
+  frameRate(25); //???
   
 background(0);
-size(300,675);
+size(280,640);
 
 ledFactory = new LedFactory();
 octows2811 = new Octows2811();
@@ -32,17 +35,40 @@ sensorFactory = new SensorFactory();
 
 InitializeAllTheThings();
 
+
+gameState = GameState.MOVIE;
 }
 
 
 void draw()
 {
-  
-c.play();
-//playMovie(movies[0]);
+ 
+ //ChooseGame();
+ ActionGame();
 
-//println(this.frameRate);
+ sensorFactory.drawSensorsOnSim();
 }
+
+void ActionGame()
+{
+  
+  if(gameState == GameState.WAITING)
+  {
+    println("WaitingState");
+    delay(1000);
+  }
+  else if (gameState == GameState.CIRCLE)
+  
+  {
+    println("Playing Circle");
+    c.play();
+  }
+  else if (gameState == GameState.MOVIE)
+  {
+    playMovie(movies[0]);
+  }
+}
+
 
 void InitializeAllTheThings()
 {

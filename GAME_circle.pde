@@ -23,7 +23,7 @@ void play()
     if(distance<50) ledFactory.ledArray[i].pixelColor = color(brightness-(distance* (brightness/circleDistance)), 0, 0);;
   }
       
-  ledFactory.drawLeds();
+  ledFactory.drawLedsOnSim();
   octows2811.pushLedArrayToOctows2811();
   
   }
