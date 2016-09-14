@@ -48,9 +48,9 @@ if(!playingMovie)
 
   if(myMovie.time() ==  myMovie.duration()) //this will stop a second short of the end. 
   {
-    gameState = GameState.WAITING;
+    masterGameState = MasterGameState.WAITING;
     println("EndedMovie");
-    println("GameState=" + gameState);
+    println("GameState=" + masterGameState);
     ledFactory.clearLedColors();
     myMovie.stop();
     playingMovie=false;

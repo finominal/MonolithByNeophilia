@@ -11,7 +11,7 @@ Octows2811 octows2811;
 SensorFactory sensorFactory;
 
 //global objects
-GameState gameState = GameState.WAITING;
+MasterGameState masterGameState = MasterGameState.WAITING;
 
 //Games
 GameCircle c;
@@ -36,7 +36,7 @@ sensorFactory = new SensorFactory();
 InitializeAllTheThings();
 
 
-gameState = GameState.MOVIE;
+masterGameState = MasterGameState.MOVIE;
 }
 
 
@@ -52,18 +52,18 @@ void draw()
 void ActionGame()
 {
   
-  if(gameState == GameState.WAITING)
+  if(masterGameState == MasterGameState.WAITING)
   {
     println("WaitingState");
     delay(1000);
   }
-  else if (gameState == GameState.CIRCLE)
+  else if (masterGameState == MasterGameState.CIRCLE)
   
   {
     println("Playing Circle");
     c.play();
   }
-  else if (gameState == GameState.MOVIE)
+  else if (masterGameState == MasterGameState.MOVIE)
   {
     playMovie(movies[0]);
   }

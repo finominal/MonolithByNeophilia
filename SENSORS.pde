@@ -87,30 +87,39 @@ It reads all the channel threes of the muxes in one speep, and then selected a d
     for(int x=0; x<sensorsXCount; x++)
     {
           for(int y=0; y<sensorsYCount; y++)
-    {
-      Sensor currentSensor = sensorArrayXY[x][y];
-      
-      if(currentSensor.on)
-      {
-        fill(color(0,250,0));
+          {
+            Sensor currentSensor = sensorArrayXY[x][y];
+            
+            if(currentSensor.on)
+            {
+              fill(color(0,250,0));
+            }
+            else
+            {
+              fill(color(0,120,0));
+            }
+            ellipse(currentSensor.worldLocation.x, currentSensor.worldLocation.y, 2,2);
+          }
       }
-      else
-      {
-        fill(color(0,120,0));
-      }
-      ellipse(currentSensor.worldLocation.x, currentSensor.worldLocation.y, 2,2);
-    }
-  
     }
   }
-}
-
-
-
-
-
-
-
+  
+    void DEV_LightUpNearestLED()
+    {
+    
+          for(int x=0; x<sensorsXCount; x++)
+          {
+            for(int y=0; y<sensorsYCount; y++)
+            {
+              if(sensorArrayXY[x][y].on == true)
+              {
+                ledFactory.ledArrayXY[x][y].pixelColor = color(128,0,128);//show purple
+              }
+          
+            }
+        }
+    }
+    
 
   void initializeGPIO()
   {
@@ -157,7 +166,8 @@ It reads all the channel threes of the muxes in one speep, and then selected a d
       }
     }
   }
-}
+  
+}//end class
 
 
 class Sensor extends PVector

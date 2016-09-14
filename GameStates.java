@@ -1,4 +1,4 @@
-enum GameState {
+enum MasterGameState {
   WAITING,
   CIRCLE,
   MOVIE
