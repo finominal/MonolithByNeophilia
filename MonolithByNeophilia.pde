@@ -16,6 +16,10 @@ MasterGameState masterGameState = MasterGameState.WAITING;
 //Games
 GameCircle c;
 
+//tests
+TestMouseAsSensor testMouseAsSensor;
+
+
 //global variables
 int brightness = 255;
 boolean showSim = true;
@@ -26,17 +30,16 @@ void setup()
 {
   frameRate(25); //???
   
-background(0);
-size(280,640);
+  background(0);
+  size(280,640);
+  
+  ledFactory = new LedFactory();
+  octows2811 = new Octows2811();
+  sensorFactory = new SensorFactory();
+  
+  InitializeAllTheThings();
 
-ledFactory = new LedFactory();
-octows2811 = new Octows2811();
-sensorFactory = new SensorFactory();
-
-InitializeAllTheThings();
-
-
-masterGameState = MasterGameState.MOVIE;
+  masterGameState = MasterGameState.TESTMOUSESENSOR;
 }
 
 
@@ -48,6 +51,8 @@ void draw()
 
  sensorFactory.drawSensorsOnSim();
 }
+
+
 
 void ActionGame()
 {
@@ -67,6 +72,10 @@ void ActionGame()
   {
     playMovie(movies[0]);
   }
+    else if (masterGameState == MasterGameState.TESTMOUSESENSOR)
+  {
+    
+  }
 }
 
 
@@ -75,10 +84,17 @@ void InitializeAllTheThings()
   ledFactory.InitializeLedArray();
   sensorFactory.initializeSensorArray();
   InitializeGames();
+  InitializeTests();
+  initializeGpioSerial();
 }
 
 
 void InitializeGames()
 {
   c = new GameCircle();
+}
+
+void InitializeTests()
+{
+  testMouseAsSensor = new TestMouseAsSensor();
 }

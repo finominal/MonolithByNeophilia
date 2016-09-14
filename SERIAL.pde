@@ -1,16 +1,31 @@
 Serial gpioSerial; 
 
-String gpioSerialPort = "gpidSerial";
+String gpioSerialPort = "ttyAMA0";
 String teensySerialPort = "/dev/tty.usbmodem1017291";
 
 void initializeGpioSerial()
 {
-  gpioSerial = newSerial(gpioSerialPort);
+  setupGPIOSerial(gpioSerialPort);
 }
 
-Serial newSerial(String portName)
+void setupGPIOSerial(String portName)
 {
-  return new Serial(this, portName);
+  try {
+     gpioSerial = newSerial( portName);
+    if (gpioSerial != null) 
+    {
+      println("Serial port " + portName + " setup and good to go!");
+    }
+  } catch (Throwable e) {
+    println("Serial port " + portName + " does not exist or is non-functional");
+    //errorCount++;
+    return;
+  }
+}
+
+Serial newSerial(String name)
+{
+  return new Serial(this, name);
 }
 
 void  displayAvailableSerialPorts()

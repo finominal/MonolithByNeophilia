@@ -1,5 +1,6 @@
 enum MasterGameState {
   WAITING,
   CIRCLE,
-  MOVIE
+  MOVIE,
+  TESTMOUSESENSOR
 }

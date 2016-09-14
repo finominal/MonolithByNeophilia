@@ -14,11 +14,11 @@ class SensorFactory
                                  0,  1,  2,  3,  4 
                                 };
 
-  int muxInputPinLeft[] = {4, 17, 27, 22, 6, 13, 19, 26};
-  int muxInputPinRight[] = {12, 16, 20, 21, 18, 23, 24, 25};
+  int muxInputPinLeft[] = {4, 17, 27,22, 5,6 ,13,26};
+  int muxInputPinRight[] = {18, 23, 24, 25, 12, 16, 20, 21};
   
   Sensor sensorArrayXY[][] = new Sensor[sensorsXCount][sensorsYCount];
-  PVector readSensor[] = new PVector[230];
+  //PVector readSensor[] = new PVector[230];
 
   SensorFactory()
   {
@@ -78,7 +78,7 @@ It reads all the channel threes of the muxes in one speep, and then selected a d
   }
 
 
-
+  //this shows each sensors location and state as dots on the computer windows.
   void drawSensorsOnSim()
   {
     if(showSim)
@@ -104,6 +104,7 @@ It reads all the channel threes of the muxes in one speep, and then selected a d
     }
   }
   
+    //this adds a color to the ledArray XY depending on the state of the sensor (in the sensor array (buffer only, not a real sensor read))
     void DEV_LightUpNearestLED()
     {
     
@@ -164,6 +165,30 @@ It reads all the channel threes of the muxes in one speep, and then selected a d
       {
         this.sensorArrayXY[x][y] = new Sensor(x,y, factorX, factorY ); //doubling up on the x/y, but will be useful for calculating distances
       }
+    }
+  }
+  
+  
+  void getMouseAsHand()
+  {
+    if(mousePressed == true)
+    {
+         PVector mouseLocation = new PVector(mouseX, mouseY);
+         for(int x=0; x<sensorsXCount; x++)
+         {
+            for(int y=0; y<sensorsYCount; y++)
+            {
+               //get the distance to each sensor, if it is less than the threshold, assume the sensor is on, simulatin a hand
+              if(mouseLocation.dist(this.sensorArrayXY[x][y].worldLocation) < this.sensorArrayXY[x][y].factorValue)
+              {
+                this.sensorArrayXY[x][y].on = true;
+              }
+              else
+              {
+                this.sensorArrayXY[x][y].on = false;
+              }
+            }
+         }
     }
   }
   
