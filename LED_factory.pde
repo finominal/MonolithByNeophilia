@@ -5,6 +5,9 @@ int yCount = 69;
 int factorValue;
 
 
+
+
+
 //Defines an LED. Has Location (x, y) and red, green and blue colors
 class LED extends PVector 
 {
@@ -102,16 +105,17 @@ class LedFactory
       ledArray[i].worldLocation.y = (ledArray[i].y * factor) + factor;
     }
   }
-  
-  private void copyToXYArray()
+   //<>//
+
+
+  public void copyToXYArray()
   {
-    for(int i = 0; i>ledArray.length; i++)
+    for(int i = 0; i<ledArray.length; i++)
     {
       ledArrayXY[(int)ledArray[i].x][(int)ledArray[i].y] = ledArray[i];
     }
     
   }
-
 
 
 

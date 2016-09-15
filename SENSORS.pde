@@ -104,22 +104,7 @@ It reads all the channel threes of the muxes in one speep, and then selected a d
     }
   }
   
-    //this adds a color to the ledArray XY depending on the state of the sensor (in the sensor array (buffer only, not a real sensor read))
-    void DEV_LightUpNearestLED()
-    {
-    
-          for(int x=0; x<sensorsXCount; x++)
-          {
-            for(int y=0; y<sensorsYCount; y++)
-            {
-              if(sensorArrayXY[x][y].on == true)
-              {
-                ledFactory.ledArrayXY[x][y].pixelColor = color(128,0,128);//show purple
-              }
-          
-            }
-        }
-    }
+    //<>//
     
 
   void initializeGPIO()
@@ -169,30 +154,45 @@ It reads all the channel threes of the muxes in one speep, and then selected a d
   }
   
   
-  void getMouseAsHand()
+  void DEV_getMouseAsHand()
   {
-    if(mousePressed == true)
-    {
-         PVector mouseLocation = new PVector(mouseX, mouseY);
-         for(int x=0; x<sensorsXCount; x++)
-         {
-            for(int y=0; y<sensorsYCount; y++)
-            {
-               //get the distance to each sensor, if it is less than the threshold, assume the sensor is on, simulatin a hand
-              if(mouseLocation.dist(this.sensorArrayXY[x][y].worldLocation) < this.sensorArrayXY[x][y].factorValue)
-              {
-                this.sensorArrayXY[x][y].on = true;
-              }
-              else
-              {
-                this.sensorArrayXY[x][y].on = false;
-              }
-            }
-         }
-    }
+     PVector mouseLocation = new PVector(mouseX, mouseY);
+     for(int x=0; x<sensorsXCount; x++)
+     {
+        for(int y=0; y<sensorsYCount; y++)
+        {
+           //get the distance to each sensor, if it is less than the threshold, assume the sensor is on, simulatin a hand
+          if(mousePressed == true && mouseLocation.dist(this.sensorArrayXY[x][y].worldLocation) < this.sensorArrayXY[x][y].factorValue*.7)
+          {
+            this.sensorArrayXY[x][y].on = true;
+          }
+          else
+          {
+            this.sensorArrayXY[x][y].on = false;
+          }
+        }
+     }
   }
   
+  
 }//end class
+
+ //this adds a color to the ledArray XY depending on the state of the sensor (in the sensor array (buffer only, not a real sensor read))
+    void DEV_LightUpNearestLED()
+    {
+    
+          for(int x=0; x<sensorFactory.sensorsXCount; x++)
+          {
+            for(int y=0; y<sensorFactory.sensorsYCount; y++)
+            {
+              if(sensorFactory.sensorArrayXY[x][y].on == true)
+              {
+                ledFactory.ledArrayXY[x][y].pixelColor = color(128,0,128);//show purple
+              }
+          
+            }
+        }
+    }
 
 
 class Sensor extends PVector

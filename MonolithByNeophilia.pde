@@ -11,7 +11,7 @@ Octows2811 octows2811;
 SensorFactory sensorFactory;
 
 //global objects
-MasterGameState masterGameState = MasterGameState.WAITING;
+MasterGameState masterGameState;
 
 //Games
 GameCircle c;
@@ -63,7 +63,6 @@ void ActionGame()
     delay(1000);
   }
   else if (masterGameState == MasterGameState.CIRCLE)
-  
   {
     println("Playing Circle");
     c.play();
@@ -74,7 +73,7 @@ void ActionGame()
   }
     else if (masterGameState == MasterGameState.TESTMOUSESENSOR)
   {
-    
+    testMouseAsSensor.play();
   }
 }
 
@@ -83,7 +82,7 @@ void InitializeAllTheThings()
 {
   ledFactory.InitializeLedArray();
   sensorFactory.initializeSensorArray();
-  InitializeGames();
+  InitializeGames(); //<>//
   InitializeTests();
   initializeGpioSerial();
 }
