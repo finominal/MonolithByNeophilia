@@ -29,7 +29,7 @@ void SetupLedToSerial()
 {
   displayAvailableSerialPorts();
 
-  serialConfigure(teensySerialPort);  // change these to your port names
+  serialConfigure(octoTeensySerialPort);  // change these to your port names
   
     for (int i=0; i < 256; i++) {
     gammatable[i] = (int)(pow((float)i / 255.0, gamma) * 255.0 + 0.5);

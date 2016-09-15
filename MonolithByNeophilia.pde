@@ -83,11 +83,8 @@ void ActionGame()
 
 void InitializeAllTheThings()
 { //<>//
-  ledFactory.InitializeLedArray();
-  sensorFactory.initializeSensorArray();
   InitializeGames();
   InitializeTests();
-  initializeGpioSerial();
 }
 
 

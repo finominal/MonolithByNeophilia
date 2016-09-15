@@ -34,6 +34,11 @@ class LedFactory
   //a copy of the above, but in an XY array
   LED[][] ledArrayXY = new LED[xCount][yCount];
   
+  LedFactory()
+  {
+    InitializeLedArray();
+  }
+  
 
   void drawLedsOnSim()
   {

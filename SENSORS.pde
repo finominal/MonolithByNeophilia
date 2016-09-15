@@ -8,75 +8,23 @@ class SensorFactory
   int numberOfMuxs  = 16;
   int sensorsPerMux = 15;
   
-  int muxChannelReadOrderIndex[] = {
-                                10, 11, 12, 13, 14, 
-                                 5,  6,  7,  8,  9, 
-                                 0,  1,  2,  3,  4 
-                                };
 
-  int muxInputPinLeft[] = {4, 17, 27,22, 5,6 ,13,26};
-  int muxInputPinRight[] = {18, 23, 24, 25, 12, 16, 20, 21};
   
   Sensor sensorArrayXY[][] = new Sensor[sensorsXCount][sensorsYCount];
-  //PVector readSensor[] = new PVector[230];
+
 
   SensorFactory()
   {
-    initializeGPIO();
-    //initializeGpioSerial(); //turned off until needed on Pi
+    initializeSensorArray();
+    initializeSensorSerial();
   }
-
-
-/*
-Reading Sensors happens by settint the INPUT of all muxes together using
-the PWM servo ontroller breakout chip. This chip is set at 100 Percent PWM, acting as a buffer.
-1 - The Pi sends the numeric number of the pin it wants to set (int/byte)
-2 - The teensy listens to its serial input for a channel number to set on the PWM chip.
-3 - Teensy commands the PWM breakout chip to set pins via i2c using a library. 
-4 - The PWM chip output selects the mux's
-5 - Pi reads in all 16 Mux Outputs into a big array. 
-
-It reads all the channel threes of the muxes in one speep, and then selected a differeninput pin, repeat. 
-*/
-
-  void readAllSensors()
-  {
-    //itterate through all 16 channels by setting the input selector for all muxes as defined in the sensorReadOrderIndex
-    
-    for( int s = 0; s <5; s++) //the first 5 SENSORS ON EACH MUX (SKIP THE FIRST ROW OF THE FIRST TWO MUXS - THEY ARE NOT CONNECTED) 
-    {
-       //select the first sensor (via index)
-       gpioSerial.write(muxChannelReadOrderIndex[s]);
-       //delayMicroSeconds(10);
-      
-      //for each mux, starting at SECOND ROW of muxes, skipping the first
-      for(int m = 1; m < muxInputPinLeft.length; m++) //8 not 16! 
-      {
-          int y = ((s/5) + (m*3)) -1; //each 5 sensors advance y by 1, Each mux advance Y by three
-          sensorArrayXY[s][y].on = GPIO.digitalRead( muxInputPinLeft[m]  ) == 0; //reversed output
-          sensorArrayXY[s+5][y].on = GPIO.digitalRead( muxInputPinRight[m] ) == 0; //reversed output
-       }
-    }
-    
   
-    for( int s = 5; s < sensorsPerMux; s++) //the remaining 10 sensors read as normal
-    {
-       //select the first sensor (via index)
-       gpioSerial.write(muxChannelReadOrderIndex[s]);
-       //delayMicroSeconds(10);
-      
-      //for each mux, starting at SECOND ROW of muxes, skipping the first
-      for(int m = 0; m < muxInputPinLeft.length; m++) //8 not 16! 
-      {
-          int y = ((s/5) + (m*3)) -1 ; //each 5 sensors advance y by 1, Each mux advance Y by three. Minus ONE to start at the second row as ZERO Y. Dont ask. 
-          sensorArrayXY[s][y].on = GPIO.digitalRead( muxInputPinLeft[m]  ) == 0; //reversed output
-          sensorArrayXY[s+5][y].on = GPIO.digitalRead( muxInputPinRight[m] ) == 0; //reversed output
-       }
-    }
-    
-    
+  void readSensors()
+  {
+    //send read all request to Teensy
+    //get back an array of results
+    //put results into the sensor array
   }
-
 
   //this shows each sensors location and state as dots on the computer windows.
   void drawSensorsOnSim()
@@ -103,41 +51,7 @@ It reads all the channel threes of the muxes in one speep, and then selected a d
       }
     }
   }
-  
-    //<>//
-    
-
-  void initializeGPIO()
-  {
-    //section1 - LEFT UPPER 
-    GPIO.pinMode(4,  GPIO.INPUT);
-    GPIO.pinMode(17, GPIO.INPUT);
-    GPIO.pinMode(27, GPIO.INPUT);
-    GPIO.pinMode(22, GPIO.INPUT);
-  
-    //section2 - RIGHT UPPER 
-    GPIO.pinMode(6,  GPIO.INPUT);
-    GPIO.pinMode(13, GPIO.INPUT);
-    GPIO.pinMode(19, GPIO.INPUT);
-    GPIO.pinMode(26, GPIO.INPUT);
-    
-    //section3 - LEFT LOWER
-    GPIO.pinMode(12, GPIO.INPUT);
-    GPIO.pinMode(16, GPIO.INPUT);
-    GPIO.pinMode(20, GPIO.INPUT);
-    GPIO.pinMode(21, GPIO.INPUT);
-    
-    //Section 4 - RIGHT LOWER
-    GPIO.pinMode(18, GPIO.INPUT);
-    GPIO.pinMode(23, GPIO.INPUT);
-    GPIO.pinMode(24, GPIO.INPUT);
-    GPIO.pinMode(25, GPIO.INPUT);
-    
-    //Output to select I2C PWM Chip will be via serial on pin 14
-    //might need to write high for pullup?
-  
-  }
-
+   //<>//
 
   void initializeSensorArray()
   {
@@ -152,6 +66,7 @@ It reads all the channel threes of the muxes in one speep, and then selected a d
       }
     }
   }
+  
   
   
 }//end class
@@ -195,3 +110,114 @@ class SensorRead extends PVector
     y = _y;
   }
 }
+
+
+
+
+/*
+OLD DIRECT PIN READS. 
+WAS USED ON RPI
+
+
+
+  int muxChannelReadOrderIndex[] = {
+                                10, 11, 12, 13, 14, 
+                                 5,  6,  7,  8,  9, 
+                                 0,  1,  2,  3,  4 
+                                };
+
+  int muxInputPinLeft[] = {4, 17, 27,22, 5,6 ,13,26};
+  int muxInputPinRight[] = {18, 23, 24, 25, 12, 16, 20, 21};
+  
+  
+
+Reading Sensors happens by settint the INPUT of all muxes together using
+the PWM servo ontroller breakout chip. This chip is set at 100 Percent PWM, acting as a buffer.
+1 - The Pi sends the numeric number of the pin it wants to set (int/byte)
+2 - The teensy listens to its serial input for a channel number to set on the PWM chip.
+3 - Teensy commands the PWM breakout chip to set pins via i2c using a library. 
+4 - The PWM chip output selects the mux's
+5 - Pi reads in all 16 Mux Outputs into a big array. 
+
+It reads all the channel threes of the muxes in one speep, and then selected a differeninput pin, repeat. 
+
+
+  void readAllSensors()
+  {
+    //itterate through all 16 channels by setting the input selector for all muxes as defined in the sensorReadOrderIndex
+    
+    for( int s = 0; s <5; s++) //the first 5 SENSORS ON EACH MUX (SKIP THE FIRST ROW OF THE FIRST TWO MUXS - THEY ARE NOT CONNECTED) 
+    {
+       //select the first sensor (via index)
+       gpioSerial.write(muxChannelReadOrderIndex[s]);
+       //delayMicroSeconds(10);
+       
+       
+       //we are probably ok to still use this concept
+      
+      //for each mux, starting at SECOND ROW of muxes, skipping the first
+      for(int m = 1; m < muxInputPinLeft.length; m++) //8 not 16! 
+      {
+          int y = ((s/5) + (m*3)) -1; //each 5 sensors advance y by 1, Each mux advance Y by three
+          sensorArrayXY[s][y].on = GPIO.digitalRead( muxInputPinLeft[m]  ) == 0; //reversed output
+          sensorArrayXY[s+5][y].on = GPIO.digitalRead( muxInputPinRight[m] ) == 0; //reversed output
+       }
+    }
+    
+  
+    for( int s = 5; s < sensorsPerMux; s++) //the remaining 10 sensors read as normal
+    {
+       //select the first sensor (via index)
+       gpioSerial.write(muxChannelReadOrderIndex[s]);
+       //delayMicroSeconds(10);
+      
+      //for each mux, starting at SECOND ROW of muxes, skipping the first
+      for(int m = 0; m < muxInputPinLeft.length; m++) //8 not 16! 
+      {
+          int y = ((s/5) + (m*3)) -1 ; //each 5 sensors advance y by 1, Each mux advance Y by three. Minus ONE to start at the second row as ZERO Y. Dont ask. 
+          sensorArrayXY[s][y].on = GPIO.digitalRead( muxInputPinLeft[m]  ) == 0; //reversed output
+          sensorArrayXY[s+5][y].on = GPIO.digitalRead( muxInputPinRight[m] ) == 0; //reversed output
+       }
+    }
+  }
+  
+  
+  
+  
+  
+  
+  
+      
+
+  void initializeGPIO()
+  {
+    //section1 - LEFT UPPER 
+    GPIO.pinMode(4,  GPIO.INPUT);
+    GPIO.pinMode(17, GPIO.INPUT);
+    GPIO.pinMode(27, GPIO.INPUT);
+    GPIO.pinMode(22, GPIO.INPUT);
+  
+    //section2 - RIGHT UPPER 
+    GPIO.pinMode(6,  GPIO.INPUT);
+    GPIO.pinMode(13, GPIO.INPUT);
+    GPIO.pinMode(19, GPIO.INPUT);
+    GPIO.pinMode(26, GPIO.INPUT);
+    
+    //section3 - LEFT LOWER
+    GPIO.pinMode(12, GPIO.INPUT);
+    GPIO.pinMode(16, GPIO.INPUT);
+    GPIO.pinMode(20, GPIO.INPUT);
+    GPIO.pinMode(21, GPIO.INPUT);
+    
+    //Section 4 - RIGHT LOWER
+    GPIO.pinMode(18, GPIO.INPUT);
+    GPIO.pinMode(23, GPIO.INPUT);
+    GPIO.pinMode(24, GPIO.INPUT);
+    GPIO.pinMode(25, GPIO.INPUT);
+    
+    //Output to select I2C PWM Chip will be via serial on pin 14
+    //might need to write high for pullup?
+  
+  }
+  
+*/

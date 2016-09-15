@@ -1,18 +1,18 @@
-Serial gpioSerial; 
+Serial sensorSerial; 
 
-String gpioSerialPort = "ttyAMA0";
-String teensySerialPort = "/dev/tty.usbmodem1017291";
+String sensorTeensySerialPort = "ttyAMA0";
+String octoTeensySerialPort = "/dev/tty.usbmodem1017291";
 
-void initializeGpioSerial()
+void initializeSensorSerial()
 {
-  setupGPIOSerial(gpioSerialPort);
+  setupSerial(sensorTeensySerialPort);
 }
 
-void setupGPIOSerial(String portName)
+void setupSerial(String portName)
 {
   try {
-     gpioSerial = newSerial( portName);
-    if (gpioSerial != null) 
+     sensorSerial = newSerial( portName);
+    if (sensorSerial != null) 
     {
       println("Serial port " + portName + " setup and good to go!");
     }
