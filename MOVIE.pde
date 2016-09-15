@@ -15,26 +15,29 @@
 //     edit framerate in movieEvent().
 
 
+  
 String[] movies = 
 {
 "/Users/finbot/Documents/Projects/Monolith/Video/FireMonolith.mov",
 "/Users/finbot/Documents/Projects/Monolith/Video/ThanksCityBuilders.mov",
 "/Users/finbot/Documents/Projects/Monolith/Video/ThanksCityBuilders2.mov",
-"/Users/finbot/Documents/Projects/Monolith/Video/ThanksCityBuilders_1.mov"
+"/Users/finbot/Documents/Projects/Monolith/Video/ThanksCityBuilders_1.mov",
+"/Users/finbot/Documents/Projects/Monolith/Video/Trip1.mov"
 };
 
 Movie myMovie; // = new Movie(this, "/Users/finbot/Desktop/Sequence 01.mov");
 
-boolean playing =  false;
-boolean newFrame = false;
+boolean playingMovie =  false;
 
 void playMovie(String movieFile) {
   
-if(!playing)
+if(!playingMovie)
 {
+  println("Playing Movie: " + movieFile);
   myMovie = new Movie(this, movieFile);
-  myMovie.loop();  // start the movie :-)
-  playing= true;
+  myMovie.play();  // start the movie :-)
+  playingMovie= true;
+
   
   //for debugging, force values
   if(octows2811.errorCount > 0)
@@ -44,19 +47,25 @@ if(!playing)
   }
 }
 
-  if(newFrame)
+  if(myMovie.time() ==  myMovie.duration()) //this will stop a second short of the end. 
   {
-    movieToLedFactory(myMovie);
-    //movieToOcto(m);
-     newFrame = false;
+    masterGameState = MasterGameState.WAITING;
+    println("EndedMovie");
+    println("GameState=" + masterGameState);
+    ledFactory.clearLedColors();
+    myMovie.stop();
+    playingMovie=false;
   }
-
+  
+    ledFactory.drawLedsOnSim();
+    octows2811.pushLedArrayToOctows2811();
   
 }
 
 void movieEvent(Movie m)
 {
-  newFrame = true;
+  //newFrame = true;
+   movieToLedFactory( m);
 }
 
 
@@ -74,8 +83,6 @@ void movieEvent(Movie m)
        ledFactory.ledArray[j].pixelColor = octows2811.ledImage[0].pixels[idx];
     }
 
-    ledFactory.drawLeds();
-    octows2811.pushLedArrayToOctows2811();
  }
 
 void movieToOcto(Movie m) {

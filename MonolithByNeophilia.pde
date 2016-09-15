@@ -3,54 +3,100 @@ import processing.serial.*;
 import processing.video.*;
 import java.awt.Rectangle;
 
+int worldWidth = 300;
+int worldHeight = 675;
+
 LedFactory ledFactory;
 Octows2811 octows2811;
+SensorFactory sensorFactory;
 
 //global objects
+MasterGameState masterGameState;
+
+//Games
 GameCircle c;
 
+//tests
+TestMouseAsSensor testMouseAsSensor;
 
 
 //global variables
 int brightness = 255;
+boolean showSim = true;
+
+
 
 void setup()
 {
-  frameRate(60);
- // serialConfigure("/dev/tty.usbmodem1017291");  //Teensy 3.1
+  frameRate(25); //???
   
+  background(0);
+  size(280,640);
   
-background(0);
-size(300,675);
+  ledFactory = new LedFactory();
+  octows2811 = new Octows2811();
+  sensorFactory = new SensorFactory();
+  
+  InitializeAllTheThings();
 
-ledFactory = new LedFactory();
- octows2811 = new Octows2811();
-
-InitializeAllTheThings();
-
-octows2811.SetupLedToSerial();
-
+  masterGameState = MasterGameState.TESTMOUSESENSOR;
 }
 
 
 void draw()
 {
-  
-//c.play();
-playMovie(movies[3]);
+ 
+ //ChooseGame();
+ ActionGame();
 
-println(this.frameRate);
+ sensorFactory.drawSensorsOnSim();
+
 }
+
+
+
+void ActionGame()
+{
+  
+  if(masterGameState == MasterGameState.WAITING)
+  {
+    println("WaitingState");
+    delay(1000);
+  }
+  else if (masterGameState == MasterGameState.CIRCLE)
+  {
+    println("Playing Circle");
+    c.play();
+  }
+  else if (masterGameState == MasterGameState.MOVIE)
+  {
+    playMovie(movies[0]);
+  }
+    else if (masterGameState == MasterGameState.TESTMOUSESENSOR)
+  {
+    testMouseAsSensor.play();
+  }
+  
+
+}
+
 
 void InitializeAllTheThings()
-{
-  ledFactory.InitializeLedArray(width / 29);
-  InitializeGPIO();
-  InitializeGameObjects();
+{ //<>//
+  ledFactory.InitializeLedArray();
+  sensorFactory.initializeSensorArray();
+  InitializeGames();
+  InitializeTests();
+  initializeGpioSerial();
 }
 
 
-void InitializeGameObjects()
+void InitializeGames()
 {
   c = new GameCircle();
+}
+
+void InitializeTests()
+{
+  testMouseAsSensor = new TestMouseAsSensor();
 }
