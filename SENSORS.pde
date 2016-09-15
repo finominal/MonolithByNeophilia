@@ -41,9 +41,9 @@ class SensorFactory
             }
             else
             {
-              fill(color(0,120,0));
+              fill(color(0,60,0));
             }
-            ellipse(currentSensor.worldLocation.x, currentSensor.worldLocation.y,3,3);
+            ellipse(currentSensor.worldLocation.x, currentSensor.worldLocation.y,4,4);
           }
       }
     }

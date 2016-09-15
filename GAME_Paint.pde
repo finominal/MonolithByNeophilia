@@ -8,22 +8,26 @@ enum PaintGameState {
   FADING
 }
 
-class GamePaint
-{
+//class GamePaint
+//{
   long lastAllFadeTime = millis();
   long quitTime =  millis()+120000;
   
+  float influenceRadius = 30;
+  
   PaintGameState gameState = PaintGameState.NOTPLAYING;
   
-  void play()
+  void paintGameplay()
   {
-    ledFactory.clearLedColors();
-    ledFactory.drawXYLedsOnSim();
+
     
    if(gameState == PaintGameState.NOTPLAYING) 
    {
+     ledFactory.clearLedColors();
+     ledFactory.drawXYLedsOnSim();
+    
       println("New Paint Game Started");  // Does not execute
-     gameState = PaintGameState.PLAYING;
+      gameState = PaintGameState.PLAYING;
    }
    else if(gameState == PaintGameState.PLAYING)
    {
@@ -38,7 +42,8 @@ class GamePaint
   
    //finally always check of the game has ended
    HasGameEnded(); 
-    
+   ledFactory.drawLedsOnSim();
+   octows2811.pushLedArrayToOctows2811();
   }
   
   void checkSensors()
@@ -54,12 +59,20 @@ class GamePaint
      {
         for(int y=0; y<sensorFactory.sensorsYCount; y++)
         {
-          Sensor currentSensor = sensorFactory.sensorArrayXY[x][y];
-          for(int i=0; i<ledFactory.ledArray.length; i++)
+          if(sensorFactory.sensorArrayXY[x][y].on)
           {
-            float distance = currentSensor.dist(ledFactory.ledArray[i].worldLocation);
+            //Sensor currentSensor = sensorFactory.sensorArrayXY[x][y];
             
-            if(distance<50) ledFactory.ledArray[i].pixelColor = color(brightness-(distance* (brightness/circleDistance)), 0, 0);;
+            for(int i=0; i<ledFactory.ledArray.length; i++) //<>//
+            {
+              float distance = sensorFactory.sensorArrayXY[x][y].worldLocation.dist(ledFactory.ledArray[i].worldLocation);
+              
+              if(distance < influenceRadius) 
+              {
+                ledFactory.ledArray[i].pixelColor = constrain( addToColor(ledFactory.ledArray[i].pixelColor, distance) , 0,255);
+              }
+            }
+            
           }
         }
      }
@@ -67,8 +80,22 @@ class GamePaint
   }
    
   void decayPaint()
-  {}
+  {
+      for(int i=0; i<ledFactory.ledArray.length; i++)
+      {
+        
+         ledFactory.ledArray[i].pixelColor =  constrain((int)(ledFactory.ledArray[i].pixelColor *.98), 0,255);
+        
+      }
+  }
 
+
+  int addToColor(int c, float distance)
+  {
+    return c+2+ (int)(c/distance); 
+  }
+  
+  
   
   boolean AreAllLEDsFaded()
   {
@@ -98,4 +125,4 @@ class GamePaint
      
    }
   
-}
+//}

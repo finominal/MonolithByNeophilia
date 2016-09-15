@@ -16,13 +16,20 @@
 
 
   
+//String[] movies = 
+//{
+//"/Users/finbot/Documents/Projects/Monolith/Video/FireMonolith.mov",
+//"/Users/finbot/Documents/Projects/Monolith/Video/ThanksCityBuilders.mov",
+//"/Users/finbot/Documents/Projects/Monolith/Video/ThanksCityBuilders2.mov",
+//"/Users/finbot/Documents/Projects/Monolith/Video/ThanksCityBuilders_1.mov",
+//"/Users/finbot/Documents/Projects/Monolith/Video/Trip1.mov"
+//};
+
 String[] movies = 
 {
-"/Users/finbot/Documents/Projects/Monolith/Video/FireMonolith.mov",
-"/Users/finbot/Documents/Projects/Monolith/Video/ThanksCityBuilders.mov",
-"/Users/finbot/Documents/Projects/Monolith/Video/ThanksCityBuilders2.mov",
-"/Users/finbot/Documents/Projects/Monolith/Video/ThanksCityBuilders_1.mov",
-"/Users/finbot/Documents/Projects/Monolith/Video/Trip1.mov"
+"c:/src/MonolithByNeoPhilia/FireMonolith.mov",
+"c:/src/MonolithByNeoPhilia/ThanksCityBuilders.mov",
+"c:/src/MonolithByNeoPhilia/Trip1.mov"
 };
 
 Movie myMovie; // = new Movie(this, "/Users/finbot/Desktop/Sequence 01.mov");

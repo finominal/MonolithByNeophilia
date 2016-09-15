@@ -1,4 +1,4 @@
-import processing.io.*;
+//import processing.io.*;
 import processing.serial.*;
 import processing.video.*;
 import java.awt.Rectangle;
@@ -15,7 +15,7 @@ MasterGameState masterGameState;
 
 //Games
 GameCircle circleGame;
-GamePaint paintGame;
+//GamePaint paintGame;
 
 //tests
 TestMouseAsSensor testMouseAsSensor;
@@ -34,7 +34,8 @@ void setup()
   
   background(0);
   size(280,640);
-  
+   // size(400,900);
+    
   ledFactory = new LedFactory();
   octows2811 = new Octows2811();
   sensorFactory = new SensorFactory();
@@ -76,7 +77,7 @@ void ActionGame()
   }
   else if (masterGameState == MasterGameState.PAINT)
   {
-    paintGame.play();
+    paintGameplay();
   }
   else if (masterGameState == MasterGameState.TESTMOUSESENSOR)
   {
@@ -96,7 +97,7 @@ void InitializeAllTheThings()
 void InitializeGames()
 {
   circleGame = new GameCircle();
-  paintGame = new GamePaint();
+  //paintGame = new GamePaint();
 }
 
 void InitializeTests()
