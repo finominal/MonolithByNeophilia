@@ -61,7 +61,7 @@ enum PaintGameState {
         {
           if(sensorFactory.sensorArrayXY[x][y].on)
           {
-            //Sensor currentSensor = sensorFactory.sensorArrayXY[x][y];
+           
             
             for(int i=0; i<ledFactory.ledArray.length; i++) //<>//
             {
@@ -78,6 +78,13 @@ enum PaintGameState {
      }
       //get distance. Inverse
   }
+  
+  
+  color addToColor(color c, float distance)
+  {
+   //add to the hue value, and also to the brightness? 
+  }
+  
    
   void decayPaint()
   {
@@ -90,11 +97,6 @@ enum PaintGameState {
   }
 
 
-  int addToColor(int c, float distance)
-  {
-    return c+2+ (int)(c/distance); 
-  }
-  
   
   
   boolean AreAllLEDsFaded()
