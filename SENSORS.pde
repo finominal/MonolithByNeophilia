@@ -154,51 +154,15 @@ It reads all the channel threes of the muxes in one speep, and then selected a d
   }
   
   
-  void DEV_getMouseAsHand()
-  {
-     PVector mouseLocation = new PVector(mouseX, mouseY);
-     for(int x=0; x<sensorsXCount; x++)
-     {
-        for(int y=0; y<sensorsYCount; y++)
-        {
-           //get the distance to each sensor, if it is less than the threshold, assume the sensor is on, simulatin a hand
-          if(mousePressed == true && mouseLocation.dist(this.sensorArrayXY[x][y].worldLocation) < this.sensorArrayXY[x][y].factorValue*.7)
-          {
-            this.sensorArrayXY[x][y].on = true;
-          }
-          else
-          {
-            this.sensorArrayXY[x][y].on = false;
-          }
-        }
-     }
-  }
-  
-  
 }//end class
 
- //this adds a color to the ledArray XY depending on the state of the sensor (in the sensor array (buffer only, not a real sensor read))
-    void DEV_LightUpNearestLED()
-    {
-    
-          for(int x=0; x<sensorFactory.sensorsXCount; x++)
-          {
-            for(int y=0; y<sensorFactory.sensorsYCount; y++)
-            {
-              if(sensorFactory.sensorArrayXY[x][y].on == true)
-              {
-                ledFactory.ledArrayXY[x][y].pixelColor = color(128,0,128);//show purple
-              }
-          
-            }
-        }
-    }
 
 
 class Sensor extends PVector
 {
   boolean on = false; //is this inversed
   PVector worldLocation; 
+  PVector nearestLED; 
   int factorValue;
   
   Sensor(int _x, int _y, int _factorX, int _factorY)
@@ -210,6 +174,11 @@ class Sensor extends PVector
     worldLocation.x = (x * (_factorX-1)) + 13;
     worldLocation.y = (y * (_factorY)) + 13;
     
+    nearestLED = new PVector();
+    nearestLED.x = x*3;
+    nearestLED.y = y*3;
+    
+    //record for use later
     factorValue = _factorX;
     
   }

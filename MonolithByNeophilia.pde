@@ -50,6 +50,7 @@ void draw()
  ActionGame();
 
  sensorFactory.drawSensorsOnSim();
+
 }
 
 
@@ -75,14 +76,16 @@ void ActionGame()
   {
     testMouseAsSensor.play();
   }
+  
+
 }
 
 
 void InitializeAllTheThings()
-{
+{ //<>//
   ledFactory.InitializeLedArray();
   sensorFactory.initializeSensorArray();
-  InitializeGames(); //<>//
+  InitializeGames();
   InitializeTests();
   initializeGpioSerial();
 }
