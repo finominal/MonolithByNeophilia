@@ -4,7 +4,6 @@ class TestMouseAsSensor
   void play()
   {
     getMouseAsHand();
-    sensorFactory.drawSensorsOnSim();
     lightUpNearestLED();
   }
 

@@ -14,10 +14,12 @@ SensorFactory sensorFactory;
 MasterGameState masterGameState;
 
 //Games
-GameCircle c;
+GameCircle circleGame;
+GamePaint paintGame;
 
 //tests
 TestMouseAsSensor testMouseAsSensor;
+boolean mouseSensor = true;
 
 
 //global variables
@@ -39,7 +41,7 @@ void setup()
   
   InitializeAllTheThings();
 
-  masterGameState = MasterGameState.TESTMOUSESENSOR;
+  masterGameState = MasterGameState.PAINT;
 }
 
 
@@ -66,17 +68,20 @@ void ActionGame()
   else if (masterGameState == MasterGameState.CIRCLE)
   {
     println("Playing Circle");
-    c.play();
+    circleGame.play();
   }
   else if (masterGameState == MasterGameState.MOVIE)
   {
     playMovie(movies[0]);
   }
-    else if (masterGameState == MasterGameState.TESTMOUSESENSOR)
+  else if (masterGameState == MasterGameState.PAINT)
+  {
+    paintGame.play();
+  }
+  else if (masterGameState == MasterGameState.TESTMOUSESENSOR)
   {
     testMouseAsSensor.play();
-  }
-  
+  }  
 
 }
 
@@ -90,7 +95,8 @@ void InitializeAllTheThings()
 
 void InitializeGames()
 {
-  c = new GameCircle();
+  circleGame = new GameCircle();
+  paintGame = new GamePaint();
 }
 
 void InitializeTests()

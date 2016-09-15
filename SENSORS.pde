@@ -7,11 +7,8 @@ class SensorFactory
   int sensorsYCount = 23;
   int numberOfMuxs  = 16;
   int sensorsPerMux = 15;
-  
 
-  
   Sensor sensorArrayXY[][] = new Sensor[sensorsXCount][sensorsYCount];
-
 
   SensorFactory()
   {
@@ -40,13 +37,13 @@ class SensorFactory
             
             if(currentSensor.on)
             {
-              fill(color(0,250,0));
+              fill(color(125,250,125));
             }
             else
             {
               fill(color(0,120,0));
             }
-            ellipse(currentSensor.worldLocation.x, currentSensor.worldLocation.y, 2,2);
+            ellipse(currentSensor.worldLocation.x, currentSensor.worldLocation.y,3,3);
           }
       }
     }

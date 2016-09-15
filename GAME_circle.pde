@@ -13,7 +13,7 @@ void play()
   x = mouseX;
   y = mouseY;
         
- // ledFactory. 
+
   ledFactory.clearLedColors();
 
   for(int i=0; i<ledFactory.ledArray.length; i++)
