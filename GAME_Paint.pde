@@ -10,19 +10,24 @@ enum PaintGameState {
 
 //class GamePaint
 //{
+  int scale = 254;
+  
   long lastAllFadeTime = millis();
   long quitTime =  millis()+120000;
   
   float influenceRadius = 30;
+  
+  float hue = 0;
   
   PaintGameState gameState = PaintGameState.NOTPLAYING;
   
   void paintGameplay()
   {
 
-    
    if(gameState == PaintGameState.NOTPLAYING) 
    {
+     colorMode(HSB,scale);
+     
      ledFactory.clearLedColors();
      ledFactory.drawXYLedsOnSim();
     
@@ -55,6 +60,9 @@ enum PaintGameState {
   
   void addPaint()
   {
+    hue+=2;
+    hue = hue % scale;
+    
     //foreach sensor
      for(int x=0; x<sensorFactory.sensorsXCount; x++)
      {
@@ -86,7 +94,7 @@ enum PaintGameState {
   color addToColor(color c, float distance)
   {
    //add to the hue value, and also to the brightness? 
-   color cc = color(250, 0, 0);
+   color cc = color(hue, 250, constrain( brightness(c) + (distance / 5 / (distance/influenceRadius) ),0,254) );
    
    return cc; //<>//
    //return color(hue(c)+1, 255, brightness(c)+2);
@@ -97,9 +105,13 @@ enum PaintGameState {
   {
       for(int i=0; i<ledFactory.ledArray.length; i++)
       {
-        float r = red(ledFactory.ledArray[i].pixelColor);
+     
         
-        ledFactory.ledArray[i].pixelColor =  color( constrain(r *.98,0,254),0,0);
+        ledFactory.ledArray[i].pixelColor =  
+        color(  hue(ledFactory.ledArray[i].pixelColor),
+                254,
+                brightness(ledFactory.ledArray[i].pixelColor)*.98
+                );
         
       }
   }
