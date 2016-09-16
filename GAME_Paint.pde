@@ -44,6 +44,7 @@ enum PaintGameState {
    HasGameEnded(); 
    ledFactory.drawLedsOnSim();
    octows2811.pushLedArrayToOctows2811();
+   
   }
   
   void checkSensors()
@@ -61,15 +62,15 @@ enum PaintGameState {
         {
           if(sensorFactory.sensorArrayXY[x][y].on)
           {
-           
-            
-            for(int i=0; i<ledFactory.ledArray.length; i++) //<>//
+
+            for(int i=0; i<ledFactory.ledArray.length; i++)
             {
               float distance = sensorFactory.sensorArrayXY[x][y].worldLocation.dist(ledFactory.ledArray[i].worldLocation);
               
               if(distance < influenceRadius) 
               {
-                ledFactory.ledArray[i].pixelColor = constrain( addToColor(ledFactory.ledArray[i].pixelColor, distance) , 0,255);
+                color ccc =  addToColor(ledFactory.ledArray[i].pixelColor, distance); //<>//
+                ledFactory.ledArray[i].pixelColor = ccc;
               }
             }
             
@@ -77,12 +78,18 @@ enum PaintGameState {
         }
      }
       //get distance. Inverse
+    
+      
   }
   
   
   color addToColor(color c, float distance)
   {
    //add to the hue value, and also to the brightness? 
+   color cc = color(250, 0, 0);
+   
+   return cc; //<>//
+   //return color(hue(c)+1, 255, brightness(c)+2);
   }
   
    
@@ -90,8 +97,9 @@ enum PaintGameState {
   {
       for(int i=0; i<ledFactory.ledArray.length; i++)
       {
+        float r = red(ledFactory.ledArray[i].pixelColor);
         
-         ledFactory.ledArray[i].pixelColor =  constrain((int)(ledFactory.ledArray[i].pixelColor *.98), 0,255);
+        ledFactory.ledArray[i].pixelColor =  color( constrain(r *.98,0,254),0,0);
         
       }
   }
