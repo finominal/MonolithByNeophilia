@@ -3,5 +3,6 @@ enum MasterGameState {
   CIRCLE,
   MOVIE,
   PAINT,
+  UPUPUP,
   TESTMOUSESENSOR
 }

@@ -15,7 +15,8 @@ MasterGameState masterGameState;
 
 //Games
 GameCircle circleGame;
-//GamePaint paintGame;
+GamePaint paintGame;
+GameUpUpUp upUpUpGame;
 
 //tests
 TestMouseAsSensor testMouseAsSensor;
@@ -42,7 +43,7 @@ void setup()
   
   InitializeAllTheThings();
 
-  masterGameState = MasterGameState.PAINT;
+  masterGameState = MasterGameState.UPUPUP;
 }
 
 
@@ -77,11 +78,15 @@ void ActionGame()
   }
   else if (masterGameState == MasterGameState.PAINT)
   {
-    paintGameplay();
+    paintGame.play();
   }
   else if (masterGameState == MasterGameState.TESTMOUSESENSOR)
   {
     testMouseAsSensor.play();
+  }  
+  else if (masterGameState == MasterGameState.UPUPUP)
+  {
+    upUpUpGame.play();
   }  
 
 }
@@ -97,7 +102,8 @@ void InitializeAllTheThings()
 void InitializeGames()
 {
   circleGame = new GameCircle();
-  //paintGame = new GamePaint();
+  paintGame = new GamePaint();
+  upUpUpGame = new GameUpUpUp();
 }
 
 void InitializeTests()

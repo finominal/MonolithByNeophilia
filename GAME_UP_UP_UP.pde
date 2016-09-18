@@ -1,21 +1,16 @@
-///When hands touch, colors appear, then fad away
+///When hands touch, colors appear, then goes up into space
 
 // USES XY LED ARRAY
 
-enum PaintGameState {
-  NOTPLAYING,
-  PLAYING,
-  FADING
-}
 
-class GamePaint
+class GameUpUpUp
 {
   int scale = 254;
   long lastAllFadeTime = millis();
   long quitTime =  millis()+120000;
   float influenceRadius = 25;
   float hue = 0;
-  float decay = 0.999;
+  float decay = 0.9;
   
   PaintGameState gameState = PaintGameState.NOTPLAYING;
   
@@ -37,6 +32,7 @@ class GamePaint
      checkSensors();
      decayPaint();
      addPaint();
+     shiftUp();
    }
    else if(gameState == PaintGameState.FADING) 
    {
@@ -56,6 +52,10 @@ class GamePaint
     if(mouseSensor) testMouseAsSensor.getMouseAsHand();
   }
   
+  void shiftUp()
+  {
+    
+  }
   void addPaint()
   {
     hue+=1;
@@ -69,15 +69,18 @@ class GamePaint
           //check sensors
           if(sensorFactory.sensorArrayXY[x][y].on)
           {
-            for(int i=0; i<ledFactory.ledArray.length; i++)
+            
+            for(int lx=0; lx<ledFactory.ledArray.length; lx++)
             {
-              float distance = sensorFactory.sensorArrayXY[x][y].worldLocation.dist(ledFactory.ledArray[i].worldLocation);
-              
-              if(distance < influenceRadius) 
-              {
-                color ccc =  addToColor(ledFactory.ledArray[i].pixelColor, distance); //<>//
-                ledFactory.ledArray[i].pixelColor = ccc;
-              }
+                for(int ly=0; y<ledFactory.ledArray.length; y++)
+                {
+                  float distance = sensorFactory.sensorArrayXY[x][y].worldLocation.dist(ledFactory.ledArray[lx][ly].worldLocation);
+                  
+                  if(distance < influenceRadius) 
+                  {
+                    ledFactory.ledArraylx][ly].pixelColor = addToColor(ledFactory.ledArraylx][ly].pixelColor, distance);
+                  }
+                }  
             }
           }
         }
@@ -87,7 +90,7 @@ class GamePaint
   
   color addToColor(color c, float distance)
   {
-   return color(hue, 250, constrain( brightness(c) + (distance / 5 / (distance/influenceRadius) ),0,254) ); //<>//
+    return color(hue, 250, (brightness(c) + (254 - (254 * (distance/influenceRadius)))) /2 );
   }
   
   void decayPaint()
