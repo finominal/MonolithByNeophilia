@@ -8,9 +8,9 @@ class GameUpUpUp
   int scale = 254;
   long lastAllFadeTime = millis();
   long quitTime =  millis()+120000;
-  float influenceRadius = 25;
+  float influenceRadius = 60;
   float hue = 0;
-  float decay = 0.9;
+  float decay = 0.99;
   
   PaintGameState gameState = PaintGameState.NOTPLAYING;
   
@@ -30,9 +30,10 @@ class GameUpUpUp
    else if(gameState == PaintGameState.PLAYING)
    {
      checkSensors();
+     shiftUp();
      decayPaint();
      addPaint();
-     shiftUp();
+     
    }
    else if(gameState == PaintGameState.FADING) 
    {
@@ -54,8 +55,18 @@ class GameUpUpUp
   
   void shiftUp()
   {
-    
+  
+     for(int lx=0; lx<xCount; lx++)
+      {
+          for(int ly=1; ly<yCount; ly++)
+          {
+              ledFactory.ledArrayXY[lx][ly-1].pixelColor = ledFactory.ledArrayXY[lx][ly].pixelColor;
+          }  
+      }
   }
+  
+  
+  
   void addPaint()
   {
     hue+=1;
@@ -70,15 +81,15 @@ class GameUpUpUp
           if(sensorFactory.sensorArrayXY[x][y].on)
           {
             
-            for(int lx=0; lx<ledFactory.ledArray.length; lx++)
+            for(int lx=0; lx<xCount; lx++)
             {
-                for(int ly=0; y<ledFactory.ledArray.length; y++)
+                for(int ly=0; ly<yCount; ly++)
                 {
-                  float distance = sensorFactory.sensorArrayXY[x][y].worldLocation.dist(ledFactory.ledArray[lx][ly].worldLocation);
+                  float distance = sensorFactory.sensorArrayXY[x][y].worldLocation.dist(ledFactory.ledArrayXY[lx][ly].worldLocation);
                   
                   if(distance < influenceRadius) 
                   {
-                    ledFactory.ledArraylx][ly].pixelColor = addToColor(ledFactory.ledArraylx][ly].pixelColor, distance);
+                    ledFactory.ledArrayXY[lx][ly].pixelColor = addToColor(ledFactory.ledArrayXY[lx][ly].pixelColor, distance);
                   }
                 }  
             }

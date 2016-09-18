@@ -31,7 +31,7 @@ boolean showSim = true;
 
 void setup()
 {
-  frameRate(25); //???
+  frameRate(60); //???
   
   background(0);
   size(280,640);
