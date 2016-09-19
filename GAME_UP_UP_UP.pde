@@ -8,7 +8,7 @@ class GameUpUpUp
   int scale = 254;
   long lastAllFadeTime = millis();
   long quitTime =  millis()+120000;
-  float influenceRadius = 60;
+  float influenceRadius = 50;
   float hue = 0;
   float decay = 0.99;
   
@@ -62,14 +62,16 @@ class GameUpUpUp
           {
               ledFactory.ledArrayXY[lx][ly-1].pixelColor = ledFactory.ledArrayXY[lx][ly].pixelColor;
           }  
-      }
+          
+          ledFactory.ledArrayXY[lx][yCount-1].pixelColor = 0; //clear last row
+      } 
   }
   
   
   
   void addPaint()
   {
-    hue+=1;
+    hue+=5.3;
     hue = hue % scale;
     
     //foreach sensor
@@ -101,7 +103,8 @@ class GameUpUpUp
   
   color addToColor(color c, float distance)
   {
-    return color(hue, 250, (brightness(c) + (254 - (254 * (distance/influenceRadius)))) /2 );
+    
+    return color( Math.Avg( , 250, (brightness(c) + ( brightness(c) + (254 - (254 * (distance/influenceRadius) ) ))) /2  );
   }
   
   void decayPaint()

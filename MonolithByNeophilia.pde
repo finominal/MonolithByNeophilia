@@ -1,3 +1,4 @@
+ //<>//
 //import processing.io.*;
 import processing.serial.*;
 import processing.video.*;
@@ -93,7 +94,7 @@ void ActionGame()
 
 
 void InitializeAllTheThings()
-{ //<>//
+{
   InitializeGames();
   InitializeTests();
 }
