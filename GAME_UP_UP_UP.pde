@@ -9,7 +9,7 @@ class GameUpUpUp
   long lastAllFadeTime = millis();
   long quitTime =  millis()+120000;
   float influenceRadius = 50;
-  float hue = 0;
+  int hue = 0;
   float decay = 0.99;
   
   PaintGameState gameState = PaintGameState.NOTPLAYING;
@@ -104,7 +104,10 @@ class GameUpUpUp
   color addToColor(color c, float distance)
   {
     
-    return color( Math.Avg( , 250, (brightness(c) + ( brightness(c) + (254 - (254 * (distance/influenceRadius) ) ))) /2  );
+   color cc =   color(hue,250,brightness(c)+10);
+   
+   return lerpColor(c,cc, .99);
+
   }
   
   void decayPaint()
@@ -113,11 +116,24 @@ class GameUpUpUp
       {
         ledFactory.ledArray[i].pixelColor =  
         color(  hue(ledFactory.ledArray[i].pixelColor),
-                254,
-                brightness(ledFactory.ledArray[i].pixelColor)*decay
+                saturation(ledFactory.ledArray[i].pixelColor)*.95,
+                brightness(ledFactory.ledArray[i].pixelColor)*decay - randomish()
                 );
       }
   }
+  
+  int randomish()
+  {
+    if(lottery()) return 10;
+    return (int)random(0,2);
+  }
+  
+  boolean lottery()
+  {
+     return random(0,100) < 20;
+  }
+  
+  
 
   boolean AreAllLEDsFaded()
   {

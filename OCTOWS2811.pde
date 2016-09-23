@@ -1,41 +1,39 @@
 
-
 class Octows2811
 {
   //NOTE Arrays are not needed for the monolith, only one teensy being used. 
 
-int octoX = 0; 
-int octoY = 0;
-int ledsPerStrip = 0;
-
-int numPorts=0;  // the number of serial ports in use
-int maxPorts=24; // maximum number of serial ports
-float gamma = 1.7;
-
-Serial[] ledSerial = new Serial[maxPorts];     // each port's actual Serial port
-Rectangle[] ledArea = new Rectangle[maxPorts]; // the area of the movie each port gets, in % (0-100)
-boolean[] ledLayout = new boolean[maxPorts];   // layout of rows, true = even is left->right
-PImage[] ledImage = new PImage[maxPorts];      // image sent to each port //interesting! 
-int[] gammatable = new int[256];
-int errorCount=0;
-float framerate=0;
-
-Octows2811()
-{
-  SetupLedToSerial();
-}
-
-void SetupLedToSerial()
-{
-  displayAvailableSerialPorts();
-
-  serialConfigure(octoTeensySerialPort);  // change these to your port names
+  int octoX = 0; 
+  int octoY = 0;
+  int ledsPerStrip = 0;
   
-    for (int i=0; i < 256; i++) {
-    gammatable[i] = (int)(pow((float)i / 255.0, gamma) * 255.0 + 0.5);
-  }
-}
+  int numPorts=0;  // the number of serial ports in use
+  int maxPorts=24; // maximum number of serial ports
+  float gamma = 1.7;
+  
+  Serial[] ledSerial = new Serial[maxPorts];     // each port's actual Serial port
+  Rectangle[] ledArea = new Rectangle[maxPorts]; // the area of the movie each port gets, in % (0-100)
+  boolean[] ledLayout = new boolean[maxPorts];   // layout of rows, true = even is left->right
+  PImage[] ledImage = new PImage[maxPorts];      // image sent to each port //interesting! 
+  int[] gammatable = new int[256];
+  int errorCount=0;
+  float framerate=0;
 
+  Octows2811()
+  {
+    SetupLedToSerial();
+  }
+
+  void SetupLedToSerial()
+  {
+    displayAvailableSerialPorts();
+  
+    serialConfigure(octoTeensySerialPort);  // change these to your port names
+    
+      for (int i=0; i < 256; i++) {
+      gammatable[i] = (int)(pow((float)i / 255.0, gamma) * 255.0 + 0.5);
+    }
+  }
 
 void pushLedArrayToOctows2811()
 {
@@ -56,7 +54,6 @@ void pushLedArrayToOctows2811()
   
   octoData[2] = 0;
   offset++;
-  
   
   //set one set of 8 pixels at a time, with the first bytes in parallel
   color pixel[] = new color[8];
@@ -91,8 +88,6 @@ void pushLedArrayToOctows2811()
     ledSerial[0].write(octoData);
   }//error count
 } 
-
- 
 
 //can bypass alot of if we just go with OCTOWS2811 raw
 // ask a Teensy board for its LED configuration, and set up the info for it.
@@ -137,8 +132,6 @@ void serialConfigure(String portName) {
   ledLayout[numPorts] = (Integer.parseInt(param[5]) == 0);
   numPorts++;
   println("Setup usb: " + portName);
-  println("Leds per strip: " + ledsPerStrip);
-  
-}
-
+  println("Leds per strip: " + ledsPerStrip); 
+  }
 }
