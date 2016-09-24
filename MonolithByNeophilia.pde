@@ -97,6 +97,7 @@ void InitializeAllTheThings()
 {
   InitializeGames();
   InitializeTests();
+  initializeSensorSerial();
 }
 
 

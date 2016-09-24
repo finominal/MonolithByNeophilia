@@ -24,7 +24,7 @@ class GameUpUpUp
      ledFactory.clearLedColors();
      ledFactory.drawXYLedsOnSim();
     
-      println("New Paint Game Started");  // Does not execute
+      println("New Up-Up-Up  Game Started");  // Does not execute
       gameState = PaintGameState.PLAYING;
    }
    else if(gameState == PaintGameState.PLAYING)
@@ -50,7 +50,7 @@ class GameUpUpUp
   void checkSensors()
   {
     sensorFactory.readSensors();
-    if(mouseSensor) testMouseAsSensor.getMouseAsHand();
+    //if(mouseSensor) testMouseAsSensor.getMouseAsHand();
   }
   
   void shiftUp()

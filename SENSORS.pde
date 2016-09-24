@@ -9,18 +9,44 @@ class SensorFactory
   int sensorsPerMux = 15;
 
   Sensor sensorArrayXY[][] = new Sensor[sensorsXCount][sensorsYCount];
+  byte sensorDataRecieved[] = new byte[sensorsYCount*2];
 
   SensorFactory()
   {
     initializeSensorArray();
+    delay(0); //expect this to need a little bit of time to read one set of sensors, plus transfer time
     initializeSensorSerial();
   }
   
   void readSensors()
   {
-    //send read all request to Teensy
-    //get back an array of results
-    //put results into the sensor array
+    requestSensorUpdate();
+    if(recieveSensorUpdate() == 1)
+    {
+      copyRecievedDataToSensorArray();
+    }
+  }
+  
+  void copyRecievedDataToSensorArray()
+  {
+    byte mask;
+    int bufferY;
+    for(int y = 0; y<sensorsYCount; y++)
+    {
+      bufferY = y*2;
+      mask = 128;
+      
+      //get the two bits from the high byte
+      sensorArrayXY[0][y].on = sensorDataRecieved[bufferY] & 0b02;
+      sensorArrayXY[1][y].on = sensorDataRecieved[bufferY] & 0b01;
+
+      for(int x = 2; x < sensorsXCount; x++)
+      {
+        sensorArrayXY[x][y].on = sensorDataRecieved[bufferY+1] & mask;
+        mask = mask >>1;
+      }
+    }
+    
   }
 
   //this shows each sensors location and state as dots on the computer windows.
