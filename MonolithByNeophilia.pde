@@ -23,12 +23,9 @@ GameUpUpUp upUpUpGame;
 TestMouseAsSensor testMouseAsSensor;
 boolean mouseSensor = true;
 
-
 //global variables
 int brightness = 255;
 boolean showSim = true;
-
-
 
 void setup()
 {
@@ -45,6 +42,7 @@ void setup()
   InitializeAllTheThings();
 
   masterGameState = MasterGameState.UPUPUP;
+ //  masterGameState = MasterGameState.MOVIE;
 }
 
 
@@ -97,7 +95,7 @@ void InitializeAllTheThings()
 {
   InitializeGames();
   InitializeTests();
-  initializeSensorSerial();
+ 
 }
 
 

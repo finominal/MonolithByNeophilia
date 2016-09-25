@@ -8,7 +8,7 @@ class GameUpUpUp
   int scale = 254;
   long lastAllFadeTime = millis();
   long quitTime =  millis()+120000;
-  float influenceRadius = 50;
+  float influenceRadius = 40;
   int hue = 0;
   float decay = 0.99;
   
@@ -29,6 +29,7 @@ class GameUpUpUp
    }
    else if(gameState == PaintGameState.PLAYING)
    {
+     //sensorFactory.clearSensorArray();
      checkSensors();
      shiftUp();
      decayPaint();

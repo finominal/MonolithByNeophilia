@@ -1,23 +1,27 @@
 Serial sensorSerial; 
-int bautRate = 115200;
+int baudRate = 115200;
 
-String sensorTeensySerialPort = "/dev/tty.usbmodem416271";
+//String sensorTeensySerialPort = "/dev/tty.usbmodem416271";
+String sensorTeensySerialPort = "/dev/tty.usbmodem1895901";
 String octoTeensySerialPort = "/dev/tty.usbmodem1017291";
 
+// /dev/tty.usbmodem1895901 <--  sensor teensy
 // /dev/tty.usbmodem1017291   <---- octo teensy
+
 //  /dev/tty.usbmodem416271   <---- spare teensy
 
-void requestSensorUpdate()
+void serialRequestSensorUpdate()
 {
   if(sensorSerial != null)
   {
+   
     sensorSerial.write("!");
   }
 }
 
-int recieveSensorUpdate()
+int serialRecieveSensorUpdate()
 {
-  if(sensorSerial.available()>0)
+  if(sensorSerial!= null && sensorSerial.available()>0)
   {
     int howManyBytesWereSent = sensorSerial.readBytes(sensorFactory.sensorDataRecieved);
     if(howManyBytesWereSent != sensorFactory.sensorsYCount*2)// double because the array splits x=10 over two bytes.
@@ -32,10 +36,10 @@ int recieveSensorUpdate()
 
 void initializeSensorSerial()
 {
-  setupSerial(sensorTeensySerialPort);
+  setupSensorSerial(sensorTeensySerialPort);
 }
 
-void setupSerial(String portName)
+void setupSensorSerial(String portName)
 {
   try {
      sensorSerial = newSerial( portName);

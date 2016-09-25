@@ -14,22 +14,23 @@ class SensorFactory
   SensorFactory()
   {
     initializeSensorArray();
-    delay(0); //expect this to need a little bit of time to read one set of sensors, plus transfer time
     initializeSensorSerial();
   }
   
   void readSensors()
   {
-    requestSensorUpdate();
-    if(recieveSensorUpdate() == 1)
+    serialRequestSensorUpdate();
+  
+    if(serialRecieveSensorUpdate() == 1)
     {
       copyRecievedDataToSensorArray();
+      showRecievedData();
     }
   }
   
   void copyRecievedDataToSensorArray()
   {
-    byte mask;
+    int mask;
     int bufferY;
     for(int y = 0; y<sensorsYCount; y++)
     {
@@ -37,17 +38,41 @@ class SensorFactory
       mask = 128;
       
       //get the two bits from the high byte
-      sensorArrayXY[0][y].on = sensorDataRecieved[bufferY] & 0b02;
-      sensorArrayXY[1][y].on = sensorDataRecieved[bufferY] & 0b01;
+      sensorArrayXY[0][y].on = (sensorDataRecieved[bufferY] & 2) > 0;
+      sensorArrayXY[1][y].on = (sensorDataRecieved[bufferY] & 1) > 0;
 
       for(int x = 2; x < sensorsXCount; x++)
       {
-        sensorArrayXY[x][y].on = sensorDataRecieved[bufferY+1] & mask;
-        mask = mask >>1;
+        sensorArrayXY[x][y].on = (sensorDataRecieved[bufferY+1] & mask) > 0;
+        mask = mask >> 1;
       }
     }
-    
   }
+  
+  void clearSensorArray()
+  {
+  
+    for(int y = 0; y<sensorsYCount; y++)
+    {
+      for(int x = 0; x < sensorsXCount; x++)
+      {
+        sensorArrayXY[x][y].on = false;
+      }
+    }
+  }
+
+
+void showRecievedData()
+{
+  
+  for(int i = 0; i<sensorsYCount*2; i++)
+  {
+    if(sensorDataRecieved[i] >0){
+    print(i);  print("-"); println(sensorDataRecieved[i]);
+    }
+  }
+  println(millis());
+}
 
   //this shows each sensors location and state as dots on the computer windows.
   void drawSensorsOnSim()
@@ -67,7 +92,7 @@ class SensorFactory
             }
             else
             {
-              fill(color(0,60,0));
+              fill(color(0,90,0));
             }
             ellipse(currentSensor.worldLocation.x, currentSensor.worldLocation.y,4,4);
           }
